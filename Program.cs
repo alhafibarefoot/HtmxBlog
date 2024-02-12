@@ -3,12 +3,47 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc(
+        "v1",
+        new()
+        {
+            Title = builder.Environment.ApplicationName,
+            Version = "v1",
+            Contact = new()
+            {
+                Name = "Alhafi.BareFoot",
+                Email = "alhafi@hotmail.com",
+                Url = new Uri("https://www.alhafi.org/")
+            },
+            Description = " Blog_Posrs Minimal API - Swagger",
+            License = new Microsoft.OpenApi.Models.OpenApiLicense(),
+            TermsOfService = new("https://www.alhafi.org/")
+        }
+    );
+});
+
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+
+
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+if (app.Environment.IsStaging())
+{
+    // your code here
+}
+if (app.Environment.IsProduction())
+{
+     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
