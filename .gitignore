@@ -9,6 +9,9 @@
 *.sln.docstates
 _ReSharper.*/
 *.sdf
+*.db-shm
+*.db-wal
+*.db
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
