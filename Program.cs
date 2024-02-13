@@ -29,8 +29,26 @@ builder.Services.AddSwaggerGen(c =>
     );
 });
 
-builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+builder.Services.AddHttpClient();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "MyAllowedOrigins",
+        policy =>
+        {
+            policy
+                .WithOrigins("https://localhost:7137", "https://www.alhafi.org")
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        }
+    );
+});
+
+builder.Services.AddDbContext<AppDbContext>(
+    x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 var app = builder.Build();
@@ -55,9 +73,12 @@ if (app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors("MyAllowedOrigins");
 
 app.UseAuthorization();
 
@@ -70,6 +91,18 @@ app.MapGet("/hello", () => "[get] hello world!");
 app.MapPost("/hello", () => "[post] hello world!");
 app.MapPut("/hello", () => "[put] hello world!");
 app.MapDelete("/hello", () => "[delete] hello world!");
+app.MapGet(
+    "/html",
+    () =>
+    {
+        var html = System.IO.File.ReadAllText(@"./wwwroot/assests/card.html");
+
+        return Results.Content(html, "text/html");
+
+        // var reader = File.OpenText("Words.txt");
+        // var fileText = await reader.ReadToEndAsync();
+    }
+);
 
 ///********************************************************************************************
 

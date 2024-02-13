@@ -13,7 +13,7 @@
 
 
 
-    <form hx-post="/hello" hx-target=".Card_Post" hx-swap="beforeend">
+    <form hx-post="/hello" hx-target="#response-div" hx-swap="beforeend">
 
         <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
 
@@ -22,14 +22,15 @@
         <button type="submit" class="btn btn-primary mb-3">Add Post</button>
     </form>
 
-    <div id="response-div"></div>
-
-    <div class="card Card_Post" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Post Title</h5>
-            <p class="card-text">Post Content</p>
-            <a href="#" class="btn btn-danger">Delete</a>
-            <a href="#" class="btn btn-success">Success</a>
+    <div id="response-div">
+        <div class="card Card_Post" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Post Title</h5>
+                <p class="card-text">Post Content</p>
+                <a href="#" class="btn btn-danger">Delete</a>
+                <a href="#" class="btn btn-success">Success</a>
+            </div>
         </div>
+
     </div>
 </div>
