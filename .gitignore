@@ -12,6 +12,7 @@ _ReSharper.*/
 *.db-shm
 *.db-wal
 *.db
+*.log
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
