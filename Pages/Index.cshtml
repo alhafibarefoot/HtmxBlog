@@ -4,7 +4,32 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@* @section scripts{
+<script src="https://unpkg.com/htmx.org@1.9.10" ></script>
+} *@
+
+<div class="container">
+    <h1 class="display-4 text-center ">Learn HTMX</h1>
+
+
+
+    <form hx-post="/hello" hx-target=".Card_Post" hx-swap="beforeend">
+
+        <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
+
+        <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+        <button type="submit" class="btn btn-primary mb-3">Add Post</button>
+    </form>
+
+    <div id="response-div"></div>
+
+    <div class="card Card_Post" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Post Title</h5>
+            <p class="card-text">Post Content</p>
+            <a href="#" class="btn btn-danger">Delete</a>
+            <a href="#" class="btn btn-success">Success</a>
+        </div>
+    </div>
 </div>

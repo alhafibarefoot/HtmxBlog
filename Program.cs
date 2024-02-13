@@ -63,55 +63,76 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+///********************************************************************************************
+//Creaeting Hello simple API call
+
+app.MapGet("/hello", () => "[get] hello world!");
+app.MapPost("/hello", () => "[post] hello world!");
+app.MapPut("/hello", () => "[put] hello world!");
+app.MapDelete("/hello", () => "[delete] hello world!");
+
+///********************************************************************************************
 
 /// Use direct call to DBcontext calling API/////////////////////////
-        app.MapGet("api/dbcontext/v1/posts", async (AppDbContext context) =>
+app.MapGet(
+    "api/dbcontext/v1/posts",
+    async (AppDbContext context) =>
+    {
+        var commands = await context.Posts.ToListAsync();
+        return Results.Ok(commands);
+    }
+);
+app.MapGet(
+    "api/dbcontext/v1/posts/{id}",
+    async (AppDbContext context, int id) =>
+    {
+        var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
+        if (command != null)
         {
-            var commands = await context.Posts.ToListAsync();
-            return Results.Ok(commands);
-        });
-        app.MapGet("api/dbcontext/v1/posts/{id}", async (AppDbContext context, int id) =>
-        {
-            var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
-            if (command != null)
-            {
-                return Results.Ok(command);
-            }
-            return Results.NotFound();
-        });
+            return Results.Ok(command);
+        }
+        return Results.NotFound();
+    }
+);
 
-        app.MapPost("api/dbcontext/v1/posts/{id}", async (AppDbContext context, Post comm) =>
+app.MapPost(
+    "api/dbcontext/v1/posts/{id}",
+    async (AppDbContext context, Post comm) =>
+    {
+        await context.Posts.AddAsync(comm);
+        await context.SaveChangesAsync();
+        return Results.Created($"api/v1/commands/{comm.Id}", comm);
+    }
+);
+app.MapPut(
+    "api/dbcontext/v1/posts/{id}",
+    async (AppDbContext context, int id, Post comm) =>
+    {
+        var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
+        if (command != null)
         {
-            await context.Posts.AddAsync(comm);
+            command.Title = comm.Title;
+            command.Content = comm.Content;
+            command.Image = comm.Image;
             await context.SaveChangesAsync();
-            return Results.Created($"api/v1/commands/{comm.Id}", comm);
-        });
-        app.MapPut("api/dbcontext/v1/posts/{id}", async (AppDbContext context, int id, Post comm)   =>
+            return Results.NoContent();
+        }
+        return Results.NotFound();
+    }
+);
+app.MapDelete(
+    "api/dbcontext/v1/posts/{id}",
+    async (AppDbContext context, int id) =>
+    {
+        var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
+        if (command != null)
         {
-            var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
-            if (command != null)
-            {
-
-                command.Title= comm.Title;
-                command.Content = comm.Content;
-                command.Image = comm.Image;
-                await context.SaveChangesAsync();
-                return Results.NoContent();
-            }
-            return Results.NotFound();
-        });
-        app.MapDelete("api/dbcontext/v1/posts/{id}", async (AppDbContext context, int id) =>
-        {
-            var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
-            if (command != null)
-            {
-                context.Posts.Remove(command);
-                await context.SaveChangesAsync();
-                return Results.NoContent();
-            }
-            return Results.NotFound();
-        });
-
-
+            context.Posts.Remove(command);
+            await context.SaveChangesAsync();
+            return Results.NoContent();
+        }
+        return Results.NotFound();
+    }
+);
 
 app.Run();
