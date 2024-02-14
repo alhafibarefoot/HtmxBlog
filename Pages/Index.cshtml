@@ -25,7 +25,7 @@
 <div class="container" hx-ext="client-side-templates">
     <h1 class="display-4 text-center ">Learn HTMX</h1>
 
-    <form hx-get="https://api.spaceflightnewsapi.net/v4/blogs/" hx-target="#response-div" hx-swap="beforeend"
+    <form hx-get="/api/dbcontext/v1/posts" hx-target="#response-div" hx-swap="beforeend"
         nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
         hx-trigger="submit">
 
@@ -55,7 +55,7 @@
         {% endif %}
 
         <!-- results -->
-        {% for post in results %}
+        {% for post in posts %}
         <p class="fs-1"> Found {{ count }} ,The Id is #{{post.id}}".</p>
         {% endfor %}
     </template>
