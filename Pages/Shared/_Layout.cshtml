@@ -17,10 +17,14 @@ else
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] -BareFoot.Blogs</title>
         @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/HtmxPost.styles.css" asp-append-version="true" />
+
+
     </head>
 
     <body hx-boost=true hx-target="#RenderBody">
@@ -59,16 +63,29 @@ else
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
 
-        <script src="~/lib/HTMX/htmx.js"></script>
+        @* <script src="https://unpkg.com/htmx.org"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+        <script src="~/lib/HTMX/response-targets.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script> *@
 
-        <script src="~/lib/HTMX/client-side-templates.js"></script>
-        <script src="~/lib/HTMX/mustache.js"></script>
+          <script src="~/lib/HTMX/htmx.js"></script>
+          <script src="~/lib/HTMX/client-side-templates.js"></script>
+          <script src="~/lib/HTMX/mustache.js"></script>
+          <script src="~/lib/HTMX/response-targets.js"></script>
+          <script src="~/lib/HTMX/nunjucks.min.js"></script>
 
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script>
+            // CORS workaround
+            document.addEventListener("htmx:configRequest", (evt) => {
+                evt.detail.headers = [];
+            });
+          </script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
 
         @await RenderSectionAsync("Scripts", required: false)
     </body>

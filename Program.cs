@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("https://localhost:7137", "https://www.alhafi.org")
+                .WithOrigins("https://localhost:7137","http://127.0.0.1:5501", "https://www.alhafi.org")
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
@@ -108,7 +108,7 @@ app.MapGet(
 
 /// Use direct call to DBcontext calling API/////////////////////////
 app.MapGet(
-    "api/dbcontext/v1/posts",
+    "/api/dbcontext/v1/posts",
     async (AppDbContext context) =>
     {
         var commands = await context.Posts.ToListAsync();
@@ -116,7 +116,7 @@ app.MapGet(
     }
 );
 app.MapGet(
-    "api/dbcontext/v1/posts/{id}",
+    "/api/dbcontext/v1/posts/{id}",
     async (AppDbContext context, int id) =>
     {
         var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
@@ -129,7 +129,7 @@ app.MapGet(
 );
 
 app.MapPost(
-    "api/dbcontext/v1/posts/{id}",
+    "/api/dbcontext/v1/posts/{id}",
     async (AppDbContext context, Post comm) =>
     {
         await context.Posts.AddAsync(comm);
@@ -138,7 +138,7 @@ app.MapPost(
     }
 );
 app.MapPut(
-    "api/dbcontext/v1/posts/{id}",
+    "/api/dbcontext/v1/posts/{id}",
     async (AppDbContext context, int id, Post comm) =>
     {
         var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);

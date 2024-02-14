@@ -4,15 +4,30 @@
     ViewData["Title"] = "Home page";
 }
 
-@* @section scripts{
-<script src="https://unpkg.com/htmx.org@1.9.10" ></script>
-} *@
+@* @section scripts {
 
+
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="~/lib/HTMX/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script>
+        // CORS workaround
+        document.addEventListener("htmx:configRequest", (evt) => {
+            evt.detail.headers = [];
+        });
+    </script>
+
+
+
+}*@
 
 <div class="container" hx-ext="client-side-templates">
     <h1 class="display-4 text-center ">Learn HTMX</h1>
 
-    <form hx-get="/api/dbcontext/v1/posts" hx-target="#response-div" hx-swap="beforeend" mustache-template="card" >
+    <form hx-get="https://api.spaceflightnewsapi.net/v4/blogs/" hx-target="#response-div" hx-swap="beforeend"
+        nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
+        hx-trigger="submit">
 
         <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
 
@@ -30,13 +45,22 @@
             <a href="#" class="btn btn-success">Success</a>
 
         </div>
-        <div id="response-div">Change Me</div>
+        <div id="response-div"></div>
 
     </div>
 
-    <template id="card">
-        <p class="fs-1"> The Id is #{{id}} with the Title, {{title}}, and it content "{{content}}".</p>
+    <template id="blogs-template">
+        {% if not previous %}
+        <i> Found {{ count }} articles.</i>
+        {% endif %}
+
+        <!-- results -->
+        {% for post in results %}
+        <p class="fs-1"> Found {{ count }} ,The Id is #{{post.id}}".</p>
+        {% endfor %}
     </template>
 
+    <div id="serious-errors"></div>
+    <div id="not-found"></div>
 
 </div>
