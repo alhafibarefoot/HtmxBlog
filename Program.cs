@@ -1,6 +1,7 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,12 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("https://localhost:7137","http://127.0.0.1:5501", "https://www.alhafi.org")
+                .WithOrigins(
+                    "https://localhost:7137",
+                    "http://localhost:5289",
+                    "http://127.0.0.1:5501",
+                    "https://www.alhafi.org"
+                )
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
@@ -122,7 +128,9 @@ app.MapGet(
         var command = await context.Posts.FirstOrDefaultAsync(c => c.Id == id);
         if (command != null)
         {
-            return Results.Ok(command);
+            string strValue = JsonConvert.SerializeObject(command, Formatting.Indented);
+            return Results.Text(strValue, "application/json", null);
+            //return Results.Ok(command);
         }
         return Results.NotFound();
     }
