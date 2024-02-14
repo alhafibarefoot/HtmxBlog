@@ -8,12 +8,11 @@
 <script src="https://unpkg.com/htmx.org@1.9.10" ></script>
 } *@
 
-<div class="container">
+
+<div class="container" hx-ext="client-side-templates">
     <h1 class="display-4 text-center ">Learn HTMX</h1>
 
-
-
-    <form hx-get="/hello" hx-target="#response-div" hx-swap="beforeend">
+    <form hx-get="/api/dbcontext/v1/posts" hx-target="#response-div" hx-swap="beforeend" mustache-template="card" >
 
         <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
 
@@ -31,10 +30,13 @@
             <a href="#" class="btn btn-success">Success</a>
 
         </div>
+        <div id="response-div">Change Me</div>
 
     </div>
 
-    <div id="response-div">Change Me</div>
+    <template id="card">
+        <p class="fs-1"> The Id is #{{id}} with the Title, {{title}}, and it content "{{content}}".</p>
+    </template>
 
 
 </div>
