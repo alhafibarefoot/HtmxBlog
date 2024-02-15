@@ -113,11 +113,19 @@ app.MapGet(
 ///********************************************************************************************
 
 /// Use direct call to DBcontext calling API/////////////////////////
+///
+app.MapGet("/api/dbcontext/v0/posts", async (AppDbContext db) =>
+await db.Posts.ToListAsync()
+);///
 app.MapGet(
     "/api/dbcontext/v1/posts",
     async (AppDbContext context) =>
     {
         var commands = await context.Posts.ToListAsync();
+
+
+        // string strValue = JsonConvert.SerializeObject(commands, Formatting.Indented);
+        // return Results.Text({strValue}, "application/json", null);
         return Results.Ok(commands);
     }
 );
