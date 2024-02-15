@@ -51,21 +51,14 @@ evt.detail.headers = [];
 
 
     <template id="blogs-template">
-        <script>
 
-    response =  data.query.page
-    alert(response);
-
-
-
-        </script>
 
         {% if not previous %}
         <i> Found {{ count }} articles.</i>
         {% endif %}
 
         <!-- results -->
-        {% for post in object %}
+        {% for post in results %}
         <p class="fs-1"> Found {{ post.title }} ,The Id is #{{post.id}}".</p>
         {% endfor %}
     </template>
