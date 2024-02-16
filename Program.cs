@@ -114,18 +114,13 @@ app.MapGet(
 
 /// Use direct call to DBcontext calling API/////////////////////////
 ///
-app.MapGet("/api/dbcontext/v0/posts", async (AppDbContext db) =>
-await db.Posts.ToListAsync()
-);///
+
 app.MapGet(
     "/api/dbcontext/v1/posts",
     async (AppDbContext context) =>
     {
         var commands = await context.Posts.ToListAsync();
 
-
-        // string strValue = JsonConvert.SerializeObject(commands, Formatting.Indented);
-        // return Results.Text({strValue}, "application/json", null);
         return Results.Ok(commands);
     }
 );
@@ -180,6 +175,59 @@ app.MapDelete(
             await context.SaveChangesAsync();
             return Results.NoContent();
         }
+        return Results.NotFound();
+    }
+);
+
+app.MapGet("/api/dbcontext/v2/posts", async (AppDbContext db) => await db.Posts.ToListAsync());
+
+app.MapGet(
+    "/api/dbcontext/v2/posts/{id}",
+    async (int id, AppDbContext db) =>
+        await db.Posts.FindAsync(id) is Post post ? Results.Ok(post) : Results.NotFound()
+);
+
+app.MapPost(
+    "/api/dbcontext/v2/posts",
+    async (Post post, AppDbContext db) =>
+    {
+        db.Posts.Add(post);
+        await db.SaveChangesAsync();
+
+        return Results.Created($"/api/dbcontext/v2/posts/{post.Id}", post);
+    }
+);
+
+app.MapPut(
+    "/api/dbcontext/v2/posts/{id}",
+    async (int id, Post inputPost, AppDbContext db) =>
+    {
+        var post = await db.Posts.FindAsync(id);
+
+        if (post is null)
+            return Results.NotFound();
+
+        post.Title = inputPost.Title;
+        post.Content = inputPost.Content;
+        post.Image = inputPost.Image;
+
+        await db.SaveChangesAsync();
+
+        return Results.NoContent();
+    }
+);
+
+app.MapDelete(
+    "/api/dbcontext/v2/posts/{id}",
+    async (int id, AppDbContext db) =>
+    {
+        if (await db.Posts.FindAsync(id) is Post post)
+        {
+            db.Posts.Remove(post);
+            await db.SaveChangesAsync();
+            return Results.NoContent();
+        }
+
         return Results.NotFound();
     }
 );
