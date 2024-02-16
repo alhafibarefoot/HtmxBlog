@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spaceflight News Blogs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="~/lib/HTMX/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script>
+      // CORS workaround
+      document.addEventListener("htmx:configRequest", (evt) => {
+        evt.detail.headers = [];
+      });
+
+      // Set the value of the 'search-input' element to the 'search' parameter from the URL if it exists
+      htmx.onLoad(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get("search");
+        if (query) {
+          document.getElementById("search-input").value = query;
+        }
+      });
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css"
+    />
+  </head>
+  <body>
+
+    <button
+  hx-get="https://v2.jokeapi.dev/joke/Any?format=txt&safe-mode&type=single"
+  hx-target="#joke-container"
+>
+  Make me laugh!
+</button>
+
+<p id="joke-container">Click the button to load a joke...</p>
+
+
+<label>Keyword:
+  <input
+    type="text"
+    placeholder="Enter a keyword..."
+    hx-get="https://v2.jokeapi.dev/joke/Any?format=txt&safe-mode"
+    hx-target="#joke1-container"
+    name="contains"
+    hx-trigger="keyup delay:500ms"
+  />
+</label>
+
+<p id="joke1-container">Results will appear here</p>
+
+
+      </body>
+</html>

@@ -10,6 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
     <!-- <script src="gits.js"></script> -->
 
+    <script>
+      // CORS workaround
+      document.addEventListener("htmx:configRequest", (evt) => {
+        evt.detail.headers = [];
+      });
+    </script>
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css"
@@ -30,7 +37,7 @@
       </button>
 
       <script id="gistlist" type="nunjucks">
-        {% for gist in gists %}
+        {% for gist in data.gists %}
           <li>
             <a href="{{gist.html_url}}">{{gist.parsed.title}}</a><br>
             <small>{{gist.parsed.description}}</small>
@@ -39,6 +46,13 @@
       </script>
 
       <ul id="list"></ul>
+
+      <!-- <span
+        hx-get="https://api.github.com/users/marcus-at-localhost/gists"
+        hx-trigger="load delay:1s, cart-updated from:body"
+        hx-swap="outerHTML"
+      >
+      </span> -->
     </div>
   </body>
 </html>
