@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spaceflight News Blogs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="../wwwroot/lib/HTMX/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script>
+      // CORS workaround
+      document.addEventListener("htmx:configRequest", (evt) => {
+        evt.detail.headers = [];
+      });
+
+      // Set the value of the 'search-input' element to the 'search' parameter from the URL if it exists
+      htmx.onLoad(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get("search");
+        if (query) {
+          document.getElementById("search-input").value = query;
+        }
+      });
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css"
+    />
+  </head>
+  <body>
+
+    <div class="container" hx-ext="client-side-templates">
+      <h1 class="display-4 text-center ">Learn HTMX</h1>
+
+      <form hx-get="https://localhost:7137/api/dbcontext/v0/posts" hx-target="#response-div" hx-swap="beforeend"
+          nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
+          hx-trigger="submit">
+
+          <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
+
+          <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+          <button type="submit" class="btn btn-primary mb-3">Add Post</button>
+      </form>
+
+      <div class="card Card_Post" style="width: 18rem;">
+          <div class="card-body">
+
+              <h5 class="card-title">Title</h5>
+              <p class="card-text">Content</p>
+              <a href="#" class="btn btn-danger">Delete</a>
+              <a href="#" class="btn btn-success">Success</a>
+
+          </div>
+          <div id="response-div"></div>
+
+      </div>
+
+
+      <template id="blogs-template">
+
+
+
+          {% if not previous %}
+          <i> Found {{ count }} articles.</i>
+
+
+          {% endif %}
+
+          <!-- results -->
+          {% for post in [posts] %}
+          <p class="fs-1"> The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
+          {% endfor %}
+      </template>
+
+      <div id="serious-errors"></div>
+      <div id="not-found"></div>
+
+  </div>
