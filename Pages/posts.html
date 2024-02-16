@@ -33,7 +33,7 @@
       <h1 class="display-4 text-center">Learn HTMX</h1>
 
       <form
-        hx-get="/api/dbcontext/v2/posts"
+        hx-get="https://localhost:7137/api/dbcontext/v2/posts"
         hx-target="#results"
         hx-swap="beforeend"
         nunjucks-template="blogs-template"
@@ -64,22 +64,24 @@
           <a href="#" class="btn btn-danger">Delete</a>
           <a href="#" class="btn btn-success">Success</a>
         </div>
-        <div id="response-div"></div>
       </div>
 
-      <template id="blogs-template">
 
-        {% if not previous %}
-        <i> Found {{ count }} articles.</i>
+      <div id="results">
 
-        {% endif %}
+        <template id="blogs-template">
+          {% if not previous %}
+          <i> Found {{ count }} articles.</i>
 
-        <!-- results -->
-        {% for post in data.posts %}
-        <p class="fs-1">The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
-        {% endfor %}
-      </template>
-      <div id="results"></div>
+          {% endif %}
+
+          <!-- results -->
+          {% for post in posts %}
+          <p class="fs-1">The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
+          {% endfor %}
+        </template>
+
+      </div>
       <div id="serious-errors"></div>
       <div id="not-found"></div>
     </div>
