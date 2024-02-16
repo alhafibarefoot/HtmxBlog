@@ -44,6 +44,27 @@
         placeholder="Search blogs..."
         type="search"
       />
+
+<!-- <script>
+
+fetch("https://localhost:7137/api/dbcontext/v0/posts")
+  .then(response => {
+    if (response.ok) {
+      return response.text();
+    } else {
+      throw new Error('HTTP status ' + response.status);
+    }
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+</script> -->
+
+
       <template id="blogs-template">
         <!-- count -->
         {% if not previous %}

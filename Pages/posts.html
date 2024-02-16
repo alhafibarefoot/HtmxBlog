@@ -29,52 +29,59 @@
     />
   </head>
   <body>
-
     <div class="container" hx-ext="client-side-templates">
-      <h1 class="display-4 text-center ">Learn HTMX</h1>
+      <h1 class="display-4 text-center">Learn HTMX</h1>
 
-      <form hx-get="https://localhost:7137/api/dbcontext/v0/posts" hx-target="#response-div" hx-swap="beforeend"
-          nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
-          hx-trigger="submit">
+      <form
+        hx-get="https://api.spaceflightnewsapi.net/v4/blogs/"
+        hx-target="#results"
+        hx-swap="beforeend"
+        nunjucks-template="blogs-template"
+        hx-target-5*="#serious-errors"
+        hx-target-404="#not-found"
+        hx-trigger="submit"
+      >
+        <input
+          type="email"
+          class="form-control mb-3"
+          id="exampleFormControlInput1"
+          placeholder="name@example.com"
+        />
 
-          <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
+        <textarea
+          class="form-control mb-3"
+          id="exampleFormControlTextarea1"
+          rows="3"
+        ></textarea>
 
-          <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
-
-          <button type="submit" class="btn btn-primary mb-3">Add Post</button>
+        <button type="submit" class="btn btn-primary mb-3">Add Post</button>
       </form>
 
-      <div class="card Card_Post" style="width: 18rem;">
-          <div class="card-body">
-
-              <h5 class="card-title">Title</h5>
-              <p class="card-text">Content</p>
-              <a href="#" class="btn btn-danger">Delete</a>
-              <a href="#" class="btn btn-success">Success</a>
-
-          </div>
-          <div id="response-div"></div>
-
+      <div class="card Card_Post" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title">Title</h5>
+          <p class="card-text">Content</p>
+          <a href="#" class="btn btn-danger">Delete</a>
+          <a href="#" class="btn btn-success">Success</a>
+        </div>
+        <div id="response-div"></div>
       </div>
-
 
       <template id="blogs-template">
 
+        {% if not previous %}
+        <i> Found {{ count }} articles.</i>
 
+        {% endif %}
 
-          {% if not previous %}
-          <i> Found {{ count }} articles.</i>
-
-
-          {% endif %}
-
-          <!-- results -->
-          {% for post in [posts] %}
-          <p class="fs-1"> The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
-          {% endfor %}
+        <!-- results -->
+        {% for post in results %}
+        <p class="fs-1">The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
+        {% endfor %}
       </template>
-
+      <div id="results"></div>
       <div id="serious-errors"></div>
       <div id="not-found"></div>
-
-  </div>
+    </div>
+  </body>
+</html>
