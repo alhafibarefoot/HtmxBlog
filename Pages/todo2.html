@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <script src="https://unpkg.com/htmx.org"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+</head>
+<body>
+  <div hx-ext="client-side-templates">
+    <button hx-get="http://restapi.adequateshop.com/api/Traveler"
+            hx-swap="innerHTML"
+            hx-target="#content"
+            xslt-template="foo">
+      Click Me
+   </button>
+
+    <p id="content">Start</p>
+
+    <script id="foo" type="application/xml">
+      <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:template match="/">
+          page <xsl:value-of select="/TravelerinformationResponse/page" /> of <xsl:value-of select="/TravelerinformationResponse/total_pages" />
+        </xsl:template>
+      </xsl:stylesheet>
+    </script>
+  </div>
+</body>
+</html>
