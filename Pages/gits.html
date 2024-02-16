@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spaceflight News Blogs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="../wwwroot/lib/HTMX/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <!-- <script src="gits.js"></script> -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css"
+    />
+  </head>
+  <body>
+    <div hx-ext="client-side-templates">
+      <!-- hx-trigger="load, click" makes sure that api gets called on page load AND on click  !-->
+      <button
+        type="button"
+        hx-trigger="load, click"
+        hx-get="https://api.github.com/users/marcus-at-localhost/gists"
+        nunjucks-template="gistlist"
+        hx-target="#list"
+        hx-swap="innerHTML"
+      >
+        Reload
+      </button>
+
+      <script id="gistlist" type="nunjucks">
+        {% for gist in gists %}
+          <li>
+            <a href="{{gist.html_url}}">{{gist.parsed.title}}</a><br>
+            <small>{{gist.parsed.description}}</small>
+          </li>
+        {% endfor %}
+      </script>
+
+      <ul id="list"></ul>
+    </div>
+  </body>
+</html>
