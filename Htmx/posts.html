@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Spaceflight News Blogs</title>
-    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://unpkg.com/htmx.org"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
@@ -23,7 +23,7 @@
     />
   </head>
   <body>
-    <div hx-ext="client-side-templates">
+    <div hx-ext="client-side-templates" hx-boost="true">
       <!-- hx-trigger="load, click" makes sure that api gets called on page load AND on click  !-->
       <button
         type="button"
@@ -36,24 +36,19 @@
         Reload
       </button>
 
-      <script id="postlist" type="nunjucks">
-        <p>{{data.posts}}</p>
+      <template id="postlist" >
+        <p>{{data}}</p>
         {% for post in posts %}
           <li>
             <a href="{{post.id}}"></a><br>
             <small>{{post.description}}</small>
           </li>
         {% endfor %}
-      </script>
+      </template>
 
       <ul id="list"></ul>
 
-      <!-- <span
-        hx-get="https://api.github.com/users/marcus-at-localhost/gists"
-        hx-trigger="load delay:1s, cart-updated from:body"
-        hx-swap="outerHTML"
-      >
-      </span> -->
+
     </div>
   </body>
 </html>
