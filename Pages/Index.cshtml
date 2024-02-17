@@ -25,7 +25,7 @@ evt.detail.headers = [];
 <div class="container" hx-ext="client-side-templates">
     <h1 class="display-4 text-center ">Learn HTMX</h1>
 
-    <form hx-get="https://localhost:7137/api/dbcontext/v0/posts" hx-target="#response-div" hx-swap="beforeend"
+    <form hx-get="/api/dbcontext/v2/posts" hx-target="#response-div" hx-swap="beforeend"
         nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
         hx-trigger="submit">
 
