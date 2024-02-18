@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Spaceflight News Blogs</title>
+    <title>Alhafi News Blogs</title>
     <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
 
     <script src="https://unpkg.com/htmx.org"></script>
@@ -20,6 +20,8 @@
 
 
 
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
@@ -27,14 +29,14 @@
   </head>
   <body>
 <div class="container col-lg-6 offset-lg-3 " hx-ext="client-side-templates ">
-      <h1 class="display-4 text-center">Learn HTMX</h1>
+      <h1 class="display-4 text-center">Alhafi Blog</h1>
 
       <form
         hx-post="https://localhost:7137/posts"
         hx-target=".posts-div"
         hx-indicator="#indicator"
-        hx-target="afterend"
         hx-ext="json-enc"
+        hx-swap="beforeend"
         hx-trigger="submit"
       >
         <input
@@ -49,6 +51,7 @@
           class="form-control mb-3"
           name="content"
           rows="3"
+          placeholder="Please enter Content"
         ></textarea>
 
         <button type="submit" class="btn btn-primary mb-3">Add Post</button>
@@ -63,7 +66,7 @@
         hx-target-5*="#serious-errors"
         hx-target-404="#not-found"
         hx-target-error="#any-errors"
-        hx-trigger="load"
+        hx-trigger="load delay:0.5s"
 
 >
       <div class="row  align-items-start py-2 posts-div ">
@@ -74,10 +77,32 @@
               {{#data}}
               <div class="card mt-5" style="width: 19.5rem">
                 <div class="card-body">
-                  <h5 class="card-title">{{title}}</h5>
-                  <p class="card-text">{{content}}</p>
-                  <a href="#" class="btn btn-danger">Delete</a>
-                  <a href="#" class="btn btn-success">Success</a>
+                  <h5 class="card-title xtitlename">{{title}}</h5>
+                  <p class="card-text xcontentname">{{content}}</p>
+                  <a href="#" class="btn btn-danger"
+                      hx-trigger="click"
+                      hx-delete="https://localhost:7137/posts/{{id}}"
+                      hx-target=".posts-div"
+                      hx-swap="innerHTML"
+                      hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}"
+
+
+
+                  >Delete</a>
+                  <a href="#" class="btn btn-success"
+
+
+                      hx-put="https://localhost:7137/posts/{{id}}"
+                      hx-target=".posts-div"
+                      hx-swap="innerHTML"
+                      hx-indicator="#indicator"
+                      hx-include="[name=title] ,[name=content]"
+                      hx-validate="true"
+                      hx-ext="json-enc"
+                      hx-trigger="click"
+
+
+                  > Update</a>
                 </div>
               </div>
               {{/data}}
@@ -97,5 +122,6 @@
       <div id="not-found"></div>
       <div id="any-errors"></div>
 </div>
+
   </body>
 </html>
