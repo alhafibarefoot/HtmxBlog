@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
 
-
     <script>
       // CORS workaround
       document.addEventListener("htmx:configRequest", (evt) => {
@@ -24,27 +23,51 @@
     />
   </head>
   <body>
-    <div hx-ext="client-side-templates">
-      <button
+    <div class="container" hx-ext="client-side-templates">
+      <h1 class="display-4 text-center">Learn HTMX</h1>
+
+      <form
         hx-get="https://localhost:7137/api/dbcontext/v2/posts"
-        hx-swap="innerHTML"
-        hx-target="#content"
-        mustache-array-template="foo"
+        hx-target="#response-div"
+        hx-swap="beforeend"
+        mustache-array-template="blogs-template"
         hx-target-5*="#serious-errors"
         hx-target-404="#not-found"
         hx-target-error="#any-errors"
-        hx-target-error="#any-errors"
+        hx-trigger="submit"
       >
-         Click Me
-      </button>
+        <input
+          type="email"
+          class="form-control mb-3"
+          id="exampleFormControlInput1"
+          placeholder="name@example.com"
+        />
 
-      <p id="content">Start</p>
+        <textarea
+          class="form-control mb-3"
+          id="exampleFormControlTextarea1"
+          rows="3"
+        ></textarea>
 
-      <template id="foo">
+        <button type="submit" class="btn btn-primary mb-3">Add Post</button>
+      </form>
+
+      <div class="card Card_Post" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title">Title</h5>
+          <p class="card-text">Content</p>
+          <a href="#" class="btn btn-danger">Delete</a>
+          <a href="#" class="btn btn-success">Success</a>
+        </div>
+        <div id="response-div"></div>
+      </div>
+
+      <template id="blogs-template">
         {{#data}}
         <p>{{id}} at {{title}} is with {{content}}</p>
         {{/data}}
       </template>
+
       <div id="serious-errors"></div>
       <div id="not-found"></div>
       <div id="any-errors"></div>
