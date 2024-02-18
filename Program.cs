@@ -93,22 +93,22 @@ app.MapRazorPages();
 ///********************************************************************************************
 //Creaeting Hello simple API call
 
-app.MapGet("/hello", () => "[get] hello world!");
-app.MapPost("/hello", () => "[post] hello world!");
-app.MapPut("/hello", () => "[put] hello world!");
-app.MapDelete("/hello", () => "[delete] hello world!");
-app.MapGet(
-    "/html",
-    () =>
-    {
-        var html = System.IO.File.ReadAllText(@"./wwwroot/assests/card.html");
+// app.MapGet("/hello", () => "[get] hello world!");
+// app.MapPost("/hello", () => "[post] hello world!");
+// app.MapPut("/hello", () => "[put] hello world!");
+// app.MapDelete("/hello", () => "[delete] hello world!");
+// app.MapGet(
+//     "/html",
+//     () =>
+//     {
+//         var html = System.IO.File.ReadAllText(@"./wwwroot/assests/card.html");
 
-        return Results.Content(html, "text/html");
+//         return Results.Content(html, "text/html");
 
-        // var reader = File.OpenText("Words.txt");
-        // var fileText = await reader.ReadToEndAsync();
-    }
-);
+//         // var reader = File.OpenText("Words.txt");
+//         // var fileText = await reader.ReadToEndAsync();
+//     }
+// );
 
 ///********************************************************************************************
 
