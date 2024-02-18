@@ -54,7 +54,7 @@
         <button type="submit" class="btn btn-primary mb-3">Add Post</button>
         <img id="indicator" class="htmx-indicator" src="../assests/img/block.svg"/>
       </form>
- <div class="posts-div d-flex align-items-center justify-content-center" style="height: 250px;"
+ <div class="container d-flex align-items-center justify-content-center"
 
         hx-get="https://localhost:7137/posts"
         hx-target=".posts-div"
@@ -66,13 +66,13 @@
         hx-trigger="load"
 
 >
-      <div class="row justify-content-center">
+      <div class="row  align-items-start py-2 posts-div ">
 
-          <div class="col-3">
+          <div class="auto ">
 
             <template id="posts-template">
               {{#data}}
-              <div class="card mt-5" style="width: 18rem">
+              <div class="card mt-5" style="width: 19.5rem">
                 <div class="card-body">
                   <h5 class="card-title">{{title}}</h5>
                   <p class="card-text">{{content}}</p>
