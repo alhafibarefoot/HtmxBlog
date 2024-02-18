@@ -4,13 +4,14 @@
     ViewData["Title"] = "Home page";
 }
 
-@* @section scripts {
+@section scripts {
 
 
 <script src="https://unpkg.com/htmx.org"></script>
-<script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
-<script src="~/lib/HTMX/response-targets.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
 <script>
 // CORS workaround
 document.addEventListener("htmx:configRequest", (evt) => {
@@ -20,13 +21,13 @@ evt.detail.headers = [];
 
 
 
-}*@
+}
 
 <div class="container" hx-ext="client-side-templates">
     <h1 class="display-4 text-center ">Learn HTMX</h1>
 
     <form hx-get="/api/dbcontext/v2/posts" hx-target="#response-div" hx-swap="beforeend"
-        nunjucks-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
+       mustache-array-template="blogs-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
         hx-trigger="submit">
 
         <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com">
@@ -51,30 +52,9 @@ evt.detail.headers = [];
 
 
     <template id="blogs-template">
-        @* <script>
-            const url = 'https://localhost:7137/api/dbcontext/v0/posts';
-            fetch(url)
-                .then((response) => {
-                    return response.json();
-                })
-                .then((data) => {
-                    let Posts = data;
-                    alert(Posts);
-                })
-
-        </script> *@
-
-
-        {% if not previous %}
-        <i> Found {{ count }} articles.</i>
-
-
-        {% endif %}
-
-        <!-- results -->
-        {% for post in xhr.responseXML %}
-        <p class="fs-1"> The Id is #{{post.id}} , Ttile {{ post.title }}".</p>
-        {% endfor %}
+              {{#data}}
+        <p>{{id}} at {{title}} is with {{content}}</p>
+        {{/data}}
     </template>
 
     <div id="serious-errors"></div>
