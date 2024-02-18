@@ -28,9 +28,9 @@
 
       <form
         hx-get="https://localhost:7137/api/dbcontext/v2/posts"
-        hx-target="#response-div"
+        hx-target="#posts-div"
         hx-swap="beforeend"
-        mustache-array-template="blogs-template"
+        mustache-array-template="posts-template"
         hx-target-5*="#serious-errors"
         hx-target-404="#not-found"
         hx-target-error="#any-errors"
@@ -52,21 +52,20 @@
         <button type="submit" class="btn btn-primary mb-3">Add Post</button>
       </form>
 
-      <div class="card Card_Post" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Title</h5>
-          <p class="card-text">Content</p>
-          <a href="#" class="btn btn-danger">Delete</a>
-          <a href="#" class="btn btn-success">Success</a>
-        </div>
-        <div id="response-div"></div>
+      <div id="posts-div">
+        <template id="posts-template">
+          {{#data}}
+          <div class="card Card_Post" style="width: 18rem">
+            <div class="card-body">
+              <h5 class="card-title">{{title}}</h5>
+              <p class="card-text">{{content}}</p>
+              <a href="#" class="btn btn-danger">Delete</a>
+              <a href="#" class="btn btn-success">Success</a>
+            </div>
+          </div>
+          {{/data}}
+        </template>
       </div>
-
-      <template id="blogs-template">
-        {{#data}}
-        <p>{{id}} at {{title}} is with {{content}}</p>
-        {{/data}}
-      </template>
 
       <div id="serious-errors"></div>
       <div id="not-found"></div>
