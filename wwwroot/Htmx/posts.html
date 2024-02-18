@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
 
     <script>
       // CORS workaround
@@ -25,10 +26,36 @@
 
   </head>
   <body>
-    <div class="container col-lg-6 offset-lg-3 " hx-ext="client-side-templates ">
+<div class="container col-lg-6 offset-lg-3 " hx-ext="client-side-templates ">
       <h1 class="display-4 text-center">Learn HTMX</h1>
 
       <form
+        hx-post="https://localhost:7137/posts"
+        hx-target=".posts-div"
+        hx-indicator="#indicator"
+        hx-target="afterend"
+        hx-ext="json-enc"
+        hx-trigger="submit"
+      >
+        <input
+          type="text"
+          class="form-control mb-3"
+          name="title"
+          placeholder="Please enter Title"
+          required
+        />
+
+        <textarea
+          class="form-control mb-3"
+          name="content"
+          rows="3"
+        ></textarea>
+
+        <button type="submit" class="btn btn-primary mb-3">Add Post</button>
+        <img id="indicator" class="htmx-indicator" src="../assests/img/block.svg"/>
+      </form>
+ <div class="posts-div d-flex align-items-center justify-content-center" style="height: 250px;"
+
         hx-get="https://localhost:7137/posts"
         hx-target=".posts-div"
         hx-swap="beforeend"
@@ -36,47 +63,39 @@
         hx-target-5*="#serious-errors"
         hx-target-404="#not-found"
         hx-target-error="#any-errors"
-        hx-trigger="submit"
-      >
-        <input
-          type="email"
-          class="form-control mb-3"
-          id="exampleFormControlInput1"
-          placeholder="name@example.com"
-        />
+        hx-trigger="load"
 
-        <textarea
-          class="form-control mb-3"
-          id="exampleFormControlTextarea1"
-          rows="3"
-        ></textarea>
+>
+      <div class="row justify-content-center">
 
-        <button type="submit" class="btn btn-primary mb-3">Add Post</button>
-      </form>
-<div class="posts-div d-flex align-items-center justify-content-center" style="height: 250px;">
-  <div class="row justify-content-center">
-      <dic class="col">
-      <div >
-        <template id="posts-template">
-          {{#data}}
-          <div class="card mt-5" style="width: 18rem">
-            <div class="card-body">
-              <h5 class="card-title">{{title}}</h5>
-              <p class="card-text">{{content}}</p>
-              <a href="#" class="btn btn-danger">Delete</a>
-              <a href="#" class="btn btn-success">Success</a>
-            </div>
+          <div class="col-3">
+
+            <template id="posts-template">
+              {{#data}}
+              <div class="card mt-5" style="width: 18rem">
+                <div class="card-body">
+                  <h5 class="card-title">{{title}}</h5>
+                  <p class="card-text">{{content}}</p>
+                  <a href="#" class="btn btn-danger">Delete</a>
+                  <a href="#" class="btn btn-success">Success</a>
+                </div>
+              </div>
+              {{/data}}
+            </template>
+
           </div>
-          {{/data}}
-        </template>
-      </div>
-    </div>
-  </div>
+
+
+
+        </div>
+
+
+
   </div>
 
       <div id="serious-errors"></div>
       <div id="not-found"></div>
       <div id="any-errors"></div>
-    </div>
+</div>
   </body>
 </html>
