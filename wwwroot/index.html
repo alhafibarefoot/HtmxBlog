@@ -42,13 +42,13 @@
     </form>
     <div class="align-items-center justify-content-center" hx-get="https://localhost:7137/posts" hx-target=".posts-div"
       hx-swap="beforeend" hx-ext="json-enc" mustache-array-template="posts-template" hx-target-5*="#serious-errors"
-      hx-target-404="#not-found" hx-target-error="#any-errors" hx-trigger="load delay:1.0s">
+      hx-target-404="#not-found" hx-target-error="#any-errors" hx-trigger="load once delay:1.0s">
       <div class="row justify-content-around posts-div">
-        <div class="mb-auto">
+        <div class="mb-auto ">
           <template id="posts-template">
             {{#data}}
-            <div class="card mt-5" style="width: 19.5rem">
-              <div class="card-body">
+            <div class="card  mt-5  card-{{id}}" style="width: 19.5rem">
+              <div class="card-body ">
                 <h5 class="card-title xtitlename" id="xtitleID">{{title}}</h5>
                 <p class="card-text xcontentname" id="xcontentID">
                   {{content}}
@@ -60,6 +60,9 @@
                   hx-swap="none" hx-indicator="#indicator" hx-include="[name=title] ,[name=content]"
                   hx-vals="js:{titleID: changeText()}" hx-validate="true" hx-trigger="click">
                   Update</a>
+                  <a href="#" class="btn btn-success" hx-get="./editPost.html"  hx-swap="show:none"  hx-target=".card-{{id}}"
+                  >
+                  Edit</a>
               </div>
             </div>
             {{/data}}
