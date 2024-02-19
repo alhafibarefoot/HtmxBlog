@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,13 +15,23 @@
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+    <script src="./lib/HTMX/json-enc.js"></script>
 
     <script>
       // CORS workaround
       document.addEventListener("htmx:configRequest", (evt) => {
         evt.detail.headers = [];
       });
+    </script>
+
+    <script>
+      function changeText() {
+        document
+          .getElementById("titleID")
+          .setAttribute("value", document.getElementById("xtitleID").innerHTML);
+        document.getElementById("contentID").value =
+          document.getElementById("xcontentID").innerHTML;
+      }
     </script>
 
     <link
@@ -36,7 +47,7 @@
       <h1 class="display-4 text-center">Alhafi Blog</h1>
 
       <form
-        hx-post="/posts"
+        hx-post="https://localhost:7137/posts"
         hx-target=".posts-div"
         hx-indicator="#indicator"
         hx-ext="json-enc"
@@ -64,19 +75,19 @@
         <img
           id="indicator"
           class="htmx-indicator"
-          src="./assests/img/block.svg"
+          src="./assests/img/bar.svg"
         />
       </form>
       <div
         class="container d-flex align-items-center justify-content-center"
-        hx-get="/posts"
+        hx-get="https://localhost:7137/posts"
         hx-target=".posts-div"
         hx-swap="beforeend"
         mustache-array-template="posts-template"
         hx-target-5*="#serious-errors"
         hx-target-404="#not-found"
         hx-target-error="#any-errors"
-        hx-trigger="load"
+        hx-trigger="load delay:0.5s"
       >
         <div class="row align-items-start py-2 posts-div">
           <div class="auto">
@@ -92,18 +103,18 @@
                     href="#"
                     class="btn btn-danger"
                     hx-trigger="click"
-                    hx-delete="/posts/{{id}}"
+                    hx-delete="https://localhost:7137/posts/{{id}}"
                     hx-target=".posts-div"
-                    hx-swap="innerHTML"
+                    hx-swap="none"
                     hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}"
                     >Delete</a
                   >
                   <a
                     href="#"
                     class="btn btn-success"
-                    hx-put="/posts/{{id}}"
+                    hx-put="https://localhost:7137/posts/{{id}}"
                     hx-target=".posts-div"
-                    hx-swap="innerHTML"
+                    hx-swap="none"
                     hx-indicator="#indicator"
                     hx-include="[name=title] ,[name=content]"
                     hx-vals="js:{titleID: changeText()}"
@@ -125,15 +136,5 @@
       <div id="not-found"></div>
       <div id="any-errors"></div>
     </div>
-
-    <script>
-      function changeText() {
-        document
-          .getElementById("titleID")
-          .setAttribute("value", document.getElementById("xtitleID").innerHTML);
-        document.getElementById("contentID").value =
-          document.getElementById("xcontentID").innerHTML;
-      }
-    </script>
   </body>
 </html>
