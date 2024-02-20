@@ -3,7 +3,7 @@
   <head>
     <title>Alhafi News Blogs</title>
     <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
-    <link rel="shortcut icon" href="#">
+    <link rel="shortcut icon" href="#" />
 
     <script src="https://unpkg.com/htmx.org"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
@@ -12,14 +12,18 @@
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
 
     <script>
-       // CORS workaround
-      document.addEventListener("htmx:configRequest", (evt) => {
-        evt.detail.headers = [];
-      });
+      function changeText() {
+        document
+          .getElementById("titleID")
+          .setAttribute("value", document.getElementById("xtitleID").innerHTML);
+        document.getElementById("contentID").value =
+          document.getElementById("xcontentID").innerHTML;
+      }
 
       htmx.defineExtension("Alhafi-JSON-Accept-type", {
         onEvent: function (name, evt) {
           if (name === "htmx:configRequest") {
+            //evt.detail.headers["Content-Type"] = "application/json";
             evt.detail.headers["Content-Type"] = "application/json";
           }
         },
@@ -28,19 +32,9 @@
           xhr.overrideMimeType("text/json");
 
           return JSON.stringify(parameters);
-           //location.reload();
+          //location.reload();
         },
       });
-
-      function changeText() {
-        document
-          .getElementById("titleID")
-          .setAttribute("value", document.getElementById("xtitleID").innerHTML);
-        document.getElementById("contentID").value =
-          document.getElementById("xcontentID").innerHTML;
-      };
-
-
     </script>
 
     <link
@@ -50,20 +44,23 @@
       crossorigin="anonymous"
     />
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
-  <body >
-    <div class="container col-sm-6 offset-lg-3" hx-ext="client-side-templates , Alhafi-JSON-Accept-type">
+  <body>
+    <div
+      class="container col-sm-6 offset-lg-3"
+      hx-ext="client-side-templates , Alhafi-JSON-Accept-type"
+    >
       <h1 class="display-6 text-center">Alhafi Blog</h1>
 
       <form
         hx-post="https://localhost:7137/posts"
         hx-target=".posts-row"
-
         hx-swap="beforeend"
       >
         <input
@@ -98,8 +95,9 @@
           class="row justify-content-around posts-row"
           hx-get="https://localhost:7137/posts"
           mustache-array-template="posts-template"
-          hx-trigger="load once">
+          hx-trigger="load once"
         >
+          >
           <div class="mb-auto posts-col">
             <template id="posts-template">
               {{#data}}
@@ -112,9 +110,8 @@
                   <a
                     href="#"
                     class="btn btn-danger"
-
                     hx-delete="https://localhost:7137/posts/{{id}}"
-                    hx-target="body"
+                    hx-target=".posts-row"
                     hx-swap="delete"
                     hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}"
                     >Delete</a
@@ -126,10 +123,7 @@
                     hx-target=".card-{{id}}"
                     hx-indicator="#indicator"
                     hx-include="[name=title] ,[name=content]"
-
                     hx-validate="true"
-
-
                   >
                     Update</a
                   >
@@ -145,7 +139,5 @@
       <div id="not-found"></div>
       <div id="any-errors"></div>
     </div>
-
-
   </body>
 </html>
