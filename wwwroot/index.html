@@ -3,21 +3,34 @@
 
 <head>
   <title>Alhafi News Blogs</title>
-  <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
+  <meta http-equiv="Content-Type: application/json " content="text/xhtml; charset=utf-8" />
 
   <script src="https://unpkg.com/htmx.org"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
   <script src="https://unpkg.com/mustache@latest"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
-  <!-- <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script> -->
-  <script src="./lib/HTMX/json-enc.js"></script>
+
 
   <script>
     // CORS workaround
     document.addEventListener("htmx:configRequest", (evt) => {
       evt.detail.headers = [];
     });
+
+    htmx.defineExtension('Alhafi-JSON-Accept-type', {
+    onEvent: function (name, evt) {
+        if (name === "htmx:configRequest") {
+            evt.detail.headers['Content-Type'] = "application/json";
+        }
+    },
+
+    encodeParameters : function(xhr, parameters, elt) {
+        xhr.overrideMimeType('text/json');
+        //location.reload();
+        return (JSON.stringify(parameters));
+    }
+});
   </script>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -28,7 +41,7 @@
   <div class="container col-sm-6 offset-lg-3" hx-ext="client-side-templates ">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
-    <form hx-post="https://localhost:7137/posts" hx-target=".posts-div" hx-indicator="#indicator" hx-ext="json-enc"
+    <form hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-ext="Alhafi-JSON-Accept-type"
       hx-swap="beforeend" hx-trigger="submit">
       <input id="titleID" type="text" class="form-control mb-3" name="title" placeholder="Please enter Title"
         required />
@@ -40,10 +53,10 @@
       <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="30"
         height="30" />
     </form>
-    <div class="align-items-center justify-content-center" hx-get="https://localhost:7137/posts" hx-target=".posts-div"
-      hx-swap="beforeend" hx-ext="json-enc" mustache-array-template="posts-template" hx-target-5*="#serious-errors"
+    <div class="align-items-center justify-content-center" hx-get="https://localhost:7137/posts" hx-target=".posts-row"
+      hx-swap="beforeend"  mustache-array-template="posts-template" hx-target-5*="#serious-errors"
       hx-target-404="#not-found" hx-target-error="#any-errors" hx-trigger="load once delay:1.0s">
-      <div class="row justify-content-around posts-div">
+      <div class="row justify-content-around posts-row">
         <div class="mb-auto ">
           <template id="posts-template">
             {{#data}}
@@ -54,9 +67,9 @@
                   {{content}}
                 </p>
                 <a href="#" class="btn btn-danger" hx-trigger="click" hx-delete="https://localhost:7137/posts/{{id}}"
-                  hx-target=".posts-div" hx-swap="none"
+                  hx-target="..posts-row" hx-swap="none"
                   hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
-                <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".posts-div"
+                <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".posts-row"
                   hx-swap="none" hx-indicator="#indicator" hx-include="[name=title] ,[name=content]"
                   hx-vals="js:{titleID: changeText()}" hx-validate="true" hx-trigger="click">
                   Update</a>
