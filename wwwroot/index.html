@@ -100,7 +100,7 @@
                     class="btn btn-danger"
                     hx-trigger="click"
                     hx-delete="https://localhost:7137/posts/{{id}}"
-                    hx-target=".posts-div"
+                    hx-target=".posts-row"
                     hx-swap="none"
                     hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}"
                     >Delete</a
@@ -109,7 +109,7 @@
                     href="#"
                     class="btn btn-success"
                     hx-put="https://localhost:7137/posts/{{id}}"
-                    hx-target=".posts-div"
+                    hx-target=".posts-row"
                     hx-swap="none"
                     hx-indicator="#indicator"
                     hx-include="[name=title] ,[name=content]"
