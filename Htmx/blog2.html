@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spaceflight News Blogs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+    <script>
+      document.addEventListener("htmx:configRequest", (evt) => {
+        evt.detail.headers = [];
+      });
+
+      htmx.defineExtension("Alhafi-JSON-Accept-type", {
+        onEvent: function (name, evt) {
+          if (name === "htmx:configRequest") {
+            evt.detail.headers["Content-Type"] = "application/json";
+          }
+        },
+
+        encodeParameters: function (xhr, parameters, elt) {
+          xhr.overrideMimeType("text/json");
+          //location.reload();
+          return JSON.stringify(parameters);
+        },
+      });
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.css"
+    />
+  </head>
+  <body>
+    <div hx-ext="client-side-templates">
+      <div
+        hx-get="https://api.spaceflightnewsapi.net/v4/blogs/"
+        hx-ext="Alhafi-JSON-Accept-type"
+        hx-target="#result"
+        hx-trigger="load delay:100ms"
+        hx-swap="innerHTML"
+        name="search"
+        nunjucks-template="blogs-template"
+        placeholder="Search blogs..."
+        type="search"
+      ></div>
+
+      <script id="blogs-template" type="nunjucks">
+
+
+        <!-- results -->
+        {% for blog in results %}
+        <div>
+          <hr />
+          <h2>
+            <a href="{{ blog.id }}">{{ blog.title }}</a>
+          </h2>
+
+        </div>
+        {% endfor %}
+      </script>
+      <div id="result"></div>
+      <div id="serious-errors"></div>
+      <div id="not-found"></div>
+    </div>
+  </body>
+</html>
