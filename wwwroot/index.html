@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
 
     <script>
-      // CORS workaround
+       // CORS workaround
       document.addEventListener("htmx:configRequest", (evt) => {
         evt.detail.headers = [];
       });
@@ -29,8 +29,9 @@
 
         encodeParameters: function (xhr, parameters, elt) {
           xhr.overrideMimeType("text/json");
-          //location.reload();
+
           return JSON.stringify(parameters);
+           //location.reload();
         },
       });
 
@@ -51,6 +52,11 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+
   </head>
 
   <body>
@@ -95,7 +101,7 @@
           class="row justify-content-around posts-row"
           hx-get="https://localhost:7137/posts"
           mustache-array-template="posts-template"
-          hx-trigger="load once delay:0.0s">
+          hx-trigger="load once delay:1.0s">
         >
           <div class="mb-auto">
             <template id="posts-template">
@@ -112,7 +118,7 @@
                     hx-trigger="click"
                     hx-delete="https://localhost:7137/posts/{{id}}"
                     hx-target=".posts-row"
-                    hx-swap="none"
+                    hx-swap="delete"
                     hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}"
                     >Delete</a
                   >
