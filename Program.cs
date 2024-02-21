@@ -1,5 +1,6 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -78,18 +79,6 @@ if (app.Environment.IsProduction())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseCors("MyAllowedOrigins");
-
-app.UseAuthorization();
-
-app.MapRazorPages();
-
 ///********************************************************************************************
 //Creaeting Hello simple API call
 
@@ -116,7 +105,8 @@ app.MapRazorPages();
 ///
 
 
-app.MapGet("/posts", async (AppDbContext db) =>  await db.Posts.ToListAsync());
+app.MapGet("/posts", async (AppDbContext db) => await db.Posts.ToListAsync());
+
 //app.MapGet("/posts", async (AppDbContext db) =>  JsonConvert.SerializeObject(await db.Posts.ToListAsync()));
 //app.MapGet("/posts", async (AppDbContext db) =>  new Microsoft.AspNetCore.Mvc.JsonResult(await db.Posts.ToListAsync()));
 
@@ -173,4 +163,14 @@ app.MapDelete(
 );
 
 ///********************************************************************************************
+///
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseCors("MyAllowedOrigins");
+app.UseAuthorization();
+app.UseRouting();
+app.MapRazorPages();
+app.UseAuthorization();
+
+
 app.Run();
