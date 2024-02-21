@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HtmxPost.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240212112158_InitialMigrationDB")]
-    partial class InitialMigrationDB
+    [Migration("20240221213242_SeedingData")]
+    partial class SeedingData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,6 @@ namespace HtmxPost.Migrations
 
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("BLOB");
 
                     b.Property<string>("Title")
                         .IsRequired()

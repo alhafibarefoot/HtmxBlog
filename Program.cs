@@ -212,7 +212,6 @@ app.MapPut(
 
         post.Title = inputPost.Title;
         post.Content = inputPost.Content;
-        post.Image = inputPost.Image;
 
         await db.SaveChangesAsync();
 

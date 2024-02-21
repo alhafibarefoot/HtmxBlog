@@ -9,13 +9,13 @@ namespace HtmxBlog.Models
         public int Id { get; set; }
 
         [Required]
-        [JsonIgnore]
+
         public string? Title { get; set; }
 
-        [JsonIgnore]
+
         public string? Content { get; set; }
 
 
-        public byte[]? Image { get; set; }
+
     }
 }

@@ -5,7 +5,7 @@
 namespace HtmxPost.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrationDB : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,7 @@ namespace HtmxPost.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", nullable: true),
-                    Image = table.Column<byte[]>(type: "BLOB", nullable: true)
+                    Content = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

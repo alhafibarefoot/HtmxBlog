@@ -5,7 +5,7 @@
 namespace HtmxPost.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedingPosts : Migration
+    public partial class SeedingData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +15,17 @@ namespace HtmxPost.Migrations
                 columns: ["Id", "Title", "Content"],
                 values: new object[,]
                 {
-                    { 1, "SPA", "Single Page Application", },
+                    { 1, "SPA", "Single Page Application" },
                     { 2, "HTMX", "Hyper Media Content" }
                 }
             );
+
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder) { }
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+
+        }
     }
 }

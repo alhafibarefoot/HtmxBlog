@@ -25,9 +25,6 @@ namespace HtmxPost.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("BLOB");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
