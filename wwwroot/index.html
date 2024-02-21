@@ -66,7 +66,7 @@
       <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
         mustache-array-template="posts-template" hx-trigger="load once">
         >
-        <div class="mb-auto posts-col">
+        <div class="col mb-auto posts-col">
           <template id="posts-template">
             {{#data}}
             <div class="card mt-5 card-{{id}}" style="width: 19.5rem">
