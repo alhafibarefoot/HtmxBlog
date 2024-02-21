@@ -1,0 +1,56 @@
+<h1>wwwwwwwwwwwwwwwww</h1>
+<script>
+  function changeText(id) {
+    document
+      .getElementById("titleID")
+      .setAttribute("value", document.getElementById("xtitleID-" + id).innerHTML);
+    document.getElementById("contentID").value = '';
+    document.getElementById("contentID").value =
+      (document.getElementById("xcontentID-" + id).innerHTML).trim();
+  }
+
+  htmx.defineExtension("Alhafi-JSON-Accept-type", {
+    onEvent: function (name, evt) {
+      if (name === "htmx:configRequest") {
+        //evt.detail.headers["Content-Type"] = "application/json";
+        evt.detail.headers["Content-Type"] = "application/json";
+      }
+    },
+
+    encodeParameters: function (xhr, parameters, elt) {
+      xhr.overrideMimeType("text/json");
+
+      return JSON.stringify(parameters);
+      //location.reload();
+    },
+  });
+</script>
+
+<div hx-get="https://localhost:7137/posts" hx-get="./cardPost.html" hx-trigger="load once">
+  <div class="col mb-auto posts-col" mustache-array-template="posts-template">
+    <template id="posts-template">
+      {{#data}}
+      <div class="card mt-5 card-{{id}}" style="width: 19.5rem">
+        <div class="card-body">
+          <h5 class="card-title xtitlename" id="xtitleID-{{id}}">{{title}}</h5>
+          <p class="card-text xcontentname" id="xcontentID-{{id}}">
+            {{content}}
+          </p>
+          <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}" hx-target=".posts-row"
+            hx-swap="delete" hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
+          <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
+            hx-indicator="#indicator" hx-include="[name=title] ,[name=content]" hx-validate="true"
+            hx-vals="js:{'': changeText({{id}})}">
+            Update</a>
+          <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none" hx-target=".card-{{id}}">
+            Edit</a>
+        </div>
+      </div>
+      {{/data}}
+    </template>
+  </div>
+</div>
+
+<div id="serious-errors"></div>
+<div id="not-found"></div>
+<div id="any-errors"></div>
