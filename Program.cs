@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers()
+    .AddXmlSerializerFormatters()
+    .AddNewtonsoftJson();
 builder.Services.AddRazorPages();
 
 builder.Services.AddEndpointsApiExplorer();
