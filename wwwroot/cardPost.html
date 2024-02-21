@@ -1,32 +1,6 @@
-<h1>wwwwwwwwwwwwwwwww</h1>
-<script>
-  function changeText(id) {
-    document
-      .getElementById("titleID")
-      .setAttribute("value", document.getElementById("xtitleID-" + id).innerHTML);
-    document.getElementById("contentID").value = '';
-    document.getElementById("contentID").value =
-      (document.getElementById("xcontentID-" + id).innerHTML).trim();
-  }
 
-  htmx.defineExtension("Alhafi-JSON-Accept-type", {
-    onEvent: function (name, evt) {
-      if (name === "htmx:configRequest") {
-        //evt.detail.headers["Content-Type"] = "application/json";
-        evt.detail.headers["Content-Type"] = "application/json";
-      }
-    },
-
-    encodeParameters: function (xhr, parameters, elt) {
-      xhr.overrideMimeType("text/json");
-
-      return JSON.stringify(parameters);
-      //location.reload();
-    },
-  });
-</script>
-
-<div hx-get="https://localhost:7137/posts" hx-get="./cardPost.html" hx-trigger="load once">
+  <div class="container col-sm-6 offset-lg-3" hx-ext="client-side-templates">
+    <div hx-get="https://localhost:7137/posts"  hx-trigger="load once" >
   <div class="col mb-auto posts-col" mustache-array-template="posts-template">
     <template id="posts-template">
       {{#data}}
