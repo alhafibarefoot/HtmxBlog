@@ -4,6 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+///
+var varPostist = new List<PostStatic>
+{
+    new PostStatic
+    {
+        Id = 1,
+        Title = "Post1",
+        Content = "Content1"
+    },
+    new PostStatic
+    {
+        Id = 1,
+        Title = "Post1",
+        Content = "Content1"
+    }
+};
+
+///
 // Add services to the container.
 builder.Services.AddControllers().AddXmlSerializerFormatters().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
@@ -57,8 +75,8 @@ builder.Services.AddCors(options =>
     );
 });
 
-builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+builder.Services.AddDbContext<AppDbContext>(
+    x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 var app = builder.Build();
@@ -83,24 +101,76 @@ if (app.Environment.IsProduction())
 }
 
 ///********************************************************************************************
-//Creaeting Hello simple API call
+app.MapGet(
+    "api/static/posts",
+    () =>
+    {
+        return Results.Ok(varPostist);
+    }
+);
 
-// app.MapGet("/hello", () => "[get] hello world!");
-// app.MapPost("/hello", () => "[post] hello world!");
-// app.MapPut("/hello", () => "[put] hello world!");
-// app.MapDelete("/hello", () => "[delete] hello world!");
-// app.MapGet(
-//     "/html",
-//     () =>
-//     {
-//         var html = System.IO.File.ReadAllText(@"./wwwroot/assests/card.html");
+app.MapGet(
+    "api/static/posts/{id}",
+    (int id) =>
+    {
+        var varPost = varPostist.Find(c => c.Id == id);
+        if (varPost == null)
+            return Results.NotFound("Sorry this command doesn't exsists");
 
-//         return Results.Content(html, "text/html");
+        return Results.Ok(varPost);
+    }
+);
 
-//         // var reader = File.OpenText("Words.txt");
-//         // var fileText = await reader.ReadToEndAsync();
-//     }
-// );
+app.MapPut(
+    "api/static/posts/{id}",
+    (PostStatic UpdatecommListStatic, int id) =>
+    {
+        var varPost = varPostist.Find(c => c.Id == id);
+        if (varPost == null)
+            return Results.NotFound("Sorry this command doesn't exsists");
+
+        varPost.Title = UpdatecommListStatic.Title;
+        varPost.Content = UpdatecommListStatic.Content;
+
+        return Results.Ok(varPost);
+    }
+);
+
+app.MapPost(
+    "api/static/posts",
+    (PostStatic postListStatic) =>
+    {
+        if (postListStatic.Id != 0 || string.IsNullOrEmpty(postListStatic.Title))
+        {
+            return Results.BadRequest("Invalid Id or HowTo filling");
+        }
+        if (
+            varPostist.FirstOrDefault(c => c.Title.ToLower() == postListStatic.Title.ToLower())
+            != null
+        )
+        {
+            return Results.BadRequest("HowTo Exsists");
+        }
+
+        postListStatic.Id = varPostist.OrderByDescending(c => c.Id).FirstOrDefault().Id + 1;
+        varPostist.Add(postListStatic);
+        return Results.Ok(varPostist);
+    }
+);
+
+app.MapDelete(
+    "api/static/posts/{id}",
+    (int id) =>
+    {
+        var varPostL = varPostist.Find(c => c.Id == id);
+        if (varPostL == null)
+            return Results.NotFound("Sorry this command doesn't exsists");
+        varPostist.Remove(varPostL);
+        return Results.Ok(varPostL);
+    }
+);
+
+/// Use direct call to DBcontext calling API/////////////////////////
 
 ///********************************************************************************************
 
@@ -176,3 +246,12 @@ app.MapRazorPages();
 app.UseAuthorization();
 
 app.Run();
+
+class PostStatic
+{
+    public int Id { get; set; }
+
+    public string? Title { get; set; }
+
+    public string? Content { get; set; }
+}
