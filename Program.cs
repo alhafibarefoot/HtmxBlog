@@ -1,17 +1,17 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddXmlSerializerFormatters()
-    .AddNewtonsoftJson();
+builder.Services.AddControllers().AddXmlSerializerFormatters().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
-
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.IncludeFields = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -174,6 +174,5 @@ app.UseAuthorization();
 app.UseRouting();
 app.MapRazorPages();
 app.UseAuthorization();
-
 
 app.Run();
