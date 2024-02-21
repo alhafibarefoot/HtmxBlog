@@ -117,6 +117,7 @@ app.MapRazorPages();
 
 
 app.MapGet("/posts", async (AppDbContext db) =>  await db.Posts.ToListAsync());
+//app.MapGet("/posts", async (AppDbContext db) =>  JsonConvert.SerializeObject(await db.Posts.ToListAsync()));
 //app.MapGet("/posts", async (AppDbContext db) =>  new Microsoft.AspNetCore.Mvc.JsonResult(await db.Posts.ToListAsync()));
 
 

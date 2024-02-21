@@ -3,7 +3,7 @@
 
 <head>
   <title>Alhafi News Blogs</title>
-  <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="application/json;text/xhtml; charset=utf-8" />
   <link rel="shortcut icon" href="#" />
 
   <script src="https://unpkg.com/htmx.org"></script>
@@ -58,7 +58,7 @@
 </head>
 
 <body onload="checkFirstVisit()">
-  <div class="container col-sm-6 offset-lg-3" hx-ext="Alhafi-JSON-Accept-type">
+  <div class="container col-sm-6 offset-lg-3" >
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
     <form hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend">
