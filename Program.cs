@@ -15,9 +15,9 @@ var varPostist = new List<PostStatic>
     },
     new PostStatic
     {
-        Id = 1,
-        Title = "Post1",
-        Content = "Content1"
+        Id = 2,
+        Title = "Post2",
+        Content = "Content2"
     }
 };
 
