@@ -1,11 +1,10 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
-using System.Collections.Immutable;
 using System.Net.Mime;
 using System.Text;
+using System.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +34,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.WriteIndented = true;
     options.SerializerOptions.IncludeFields = true;
 });
+
+builder.Services.AddSingleton(new HtmlOptions { myHTML = "" });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -187,23 +188,24 @@ app.MapDelete(
 
 app.MapGet(
     "/html/post",
-    async (AppDbContext db) =>
+    async (HtmlOptions option,AppDbContext db) =>
     {
 
 string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
+List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
 
 
-    return Results.Extensions.HtmlResponse(
-            @"
+ foreach(var i in item)
+    {
+       //Results.Extensions.HtmlResponse(
+        option.myHTML=@"
 <div class='col mb-auto posts-col-100'>
 
     <div class='card mt-5 card-100' style='width: 19.5rem'>
 
-      <div class='card-body card-body-100'>
-        <h5 class='card-title xtitlename'>"  +json+
-        @"</h5>
-        <p class='card-text xcontentname'>Content</p>
-
+      <div class='card-body card-body-"+i.Id+@"'>
+        <h5 class='card-title xtitlename'>"  +i.Title+
+        @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
         <a href='#' class='btn btn-danger'>Delete</a>
         <a href='#' class='btn btn-success'>Update</a>
       </div>
@@ -211,9 +213,13 @@ string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
 </div>
 
 "
-        );
-
+        ;
+    option.myHTML = option.myHTML+option.myHTML;
     }
+    return Results.Extensions.HtmlResponse( option.myHTML);
+    }
+
+
 
 
 );
@@ -327,3 +333,10 @@ static class CustomResultExtensions
         return new CusomtHTMLResult(html);
     }
 }
+
+public class HtmlOptions
+{
+    public string? myHTML { get; set; }
+}
+
+
