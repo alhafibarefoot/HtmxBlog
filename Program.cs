@@ -106,6 +106,16 @@ if (app.Environment.IsProduction())
 }
 
 ///********************************************************************************************
+
+app.MapGet("/baseurl", (HttpContext context) =>
+{
+    var baseURL = context.Request.Host;
+    var basepath = context.Request.Path;
+   // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
+    return Results.Ok(baseURL);
+});
+
+
 app.MapGet(
     "api/static/posts",
     () =>
