@@ -1,6 +1,7 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Mime;
 using System.Text;
 
@@ -173,16 +174,22 @@ app.MapDelete(
 );
 
 app.MapGet(
-    "/html",
-    () =>
-        Results.Extensions.HtmlResponse(
+    "/html/post",
+    async ( Post inputPost, AppDbContext db) =>
+    {
+
+        //var myResult=   await db.Posts.ToListAsync();
+
+
+return Results.Extensions.HtmlResponse(
             @"
 <div class='col mb-auto posts-col-100'>
 
     <div class='card mt-5 card-100' style='width: 19.5rem'>
 
       <div class='card-body card-body-100'>
-        <h5 class='card-title xtitlename'>Title</h5>
+        <h5 class='card-title xtitlename'>"  + inputPost.Title +
+        @"</h5>
         <p class='card-text xcontentname'>Content</p>
 
         <a href='#' class='btn btn-danger'>Delete</a>
@@ -194,7 +201,11 @@ app.MapGet(
 
 
 "
-        )
+        );
+
+    }
+
+
 );
 
 /// Use direct call to DBcontext calling API/////////////////////////
