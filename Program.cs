@@ -3,6 +3,7 @@ using HtmxBlog.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
+using System.Collections.Immutable;
 using System.Net.Mime;
 using System.Text;
 
@@ -176,21 +177,20 @@ app.MapDelete(
 
 app.MapGet(
     "/html/post",
-    async ( Post post,AppDbContext db) =>
+    async (AppDbContext db) =>
     {
 
-         var MyResult =  await db.Posts.ToListAsync();
+string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
 
-          var tit= MyResult.Select(s=>s.Title).ToString();
 
-return Results.Extensions.HtmlResponse(
+    return Results.Extensions.HtmlResponse(
             @"
 <div class='col mb-auto posts-col-100'>
 
     <div class='card mt-5 card-100' style='width: 19.5rem'>
 
       <div class='card-body card-body-100'>
-        <h5 class='card-title xtitlename'>"  + tit +
+        <h5 class='card-title xtitlename'>"  +json+
         @"</h5>
         <p class='card-text xcontentname'>Content</p>
 
@@ -199,8 +199,6 @@ return Results.Extensions.HtmlResponse(
       </div>
 
 </div>
-
-
 
 "
         );
