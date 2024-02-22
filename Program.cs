@@ -175,10 +175,10 @@ app.MapDelete(
 
 app.MapGet(
     "/html/post",
-    async ( Post inputPost, AppDbContext db) =>
+    async ( AppDbContext db) =>
     {
 
-        //var myResult=   await db.Posts.ToListAsync();
+        var myResult=   await db.Posts.ToListAsync();
 
 
 return Results.Extensions.HtmlResponse(
@@ -188,7 +188,7 @@ return Results.Extensions.HtmlResponse(
     <div class='card mt-5 card-100' style='width: 19.5rem'>
 
       <div class='card-body card-body-100'>
-        <h5 class='card-title xtitlename'>"  + inputPost.Title +
+        <h5 class='card-title xtitlename'>"  + myResult +
         @"</h5>
         <p class='card-text xcontentname'>Content</p>
 
