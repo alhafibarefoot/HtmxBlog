@@ -1,5 +1,6 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net.Mime;
@@ -186,6 +187,26 @@ app.MapDelete(
     }
 );
 
+app.MapGet("/html/post0", () =>
+{
+    // You can return HTML from minimal APIs, but it's nothing fancy
+    string html = """
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Hello from minimal APIs!</title>
+      </head>
+      <body>
+        <p>
+          Hello from Razor Slices! The time is @Model
+        </p>
+      </body>
+      </html>
+      """;
+    return Results.Content(html);
+});
+
 app.MapGet(
     "/html/post",
     async (HtmlOptions option,AppDbContext db) =>
@@ -212,7 +233,7 @@ string ResponseHTML=null ;
             >Delete</a>
 
             <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/"+i.Id+@"' hx-target='.posts-col-"+i.Id+@"'
-             hx-include='[name=title] ,[name=content]'>
+             hx-include='[id=0],[name=title] ,[name=content]'>
             Update</a>
         </div>
 
@@ -233,6 +254,27 @@ string ResponseHTML=null ;
 
 
 );
+
+
+app.MapPost(
+    "/posts/html",
+    async ([FromBody] Post post, AppDbContext db) =>
+    {
+        // // string json = JsonConvert.SerializeObject(post);
+        // // List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
+
+        // List<Post> item  =new Post();
+        // item.Id = 0;
+        // item.Title = post.Title;
+        // item.Content= post.Content;
+        // string json = JsonConvert.SerializeObject(item);
+        //   items = JsonConvert.DeserializeObject<List<Post>>(json);
+        db.Posts.Add(post);
+        await db.SaveChangesAsync();
+
+        return Results.Created($"/posts/{post.Id}", post);
+    }
+).DisableAntiforgery();
 
 /// Use direct call to DBcontext calling API/////////////////////////
 
