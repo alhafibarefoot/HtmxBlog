@@ -207,7 +207,8 @@ string ResponseHTML=null ;
             <h5 class='card-title xtitlename'>"  +i.Title+
             @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
             <a href='#' class='btn btn-danger'>Delete</a>
-            <a href='#' class='btn btn-success'>Update</a>
+            <a href='#' class='btn btn-success hx-put='https://localhost:7137/posts/{{"+i.Id+@"}}'
+             hx-target='posts-col-{{"+i.Id+@"}}' hx-include='[name=title] ,[name=content]' hx-validate='true'>Update</a>
         </div>
 
       </div>
