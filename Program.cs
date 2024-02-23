@@ -226,7 +226,7 @@ app.MapGet(
 
             >Delete</a>
 
-            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html"
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
                 + i.Id
                 + @"' hx-target='.posts-col-"
                 + i.Id
@@ -250,7 +250,7 @@ app.MapGet(
 
 app.MapPut(
         "/posts/html/{id}",
-        async (int id, [FromForm] Post inputPost, AppDbContext db) =>
+        async (HtmlOptions option,int id, [FromForm] Post inputPost, AppDbContext db) =>
         {
             var post = await db.Posts.FindAsync(id);
 
@@ -262,22 +262,46 @@ app.MapPut(
 
             await db.SaveChangesAsync();
 
-    //         string html = """
-    //   <!DOCTYPE html>
-    //   <html lang="en">
-    //   <head>
-    //     <meta charset="utf-8">
-    //     <title>Hello from minimal APIs!</title>
-    //   </head>
-    //   <body>
-    //     <p>
-    //       Hello from Razor Slices! The time is @Model
-    //     </p>
-    //   </body>
-    //   </html>
-    //   """;
-           // return Results.Content(html);
-           return Results.NoContent();
+             option.myHTML =
+                @"
+<div class='col mb-auto posts-col-"
+                + post.Id
+                + @"'>
+
+     <div class='card mt-5 card' style='width: 19.5rem'>
+
+        <div class='card-body card-body'>
+            <h5 class='card-title xtitlename'>"
+                + post.Title
+                + @"</h5><p class='card-text xcontentname'>"
+                + post.Content
+                + @"</p>
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "
+                + post.Id
+                + @"' hx-target='.posts-row'
+            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + post.Title
+                + @"'
+
+            >Delete</a>
+
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
+                + post.Id
+                + @"' hx-target='.posts-col-"
+                + post.Id
+                + @"'
+             hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
+            Update</a>
+        </div>
+
+      </div>
+
+
+</div>
+
+";
+
+     return Results.Extensions.HtmlResponse(option.myHTML);
         }
     )
     .DisableAntiforgery();
