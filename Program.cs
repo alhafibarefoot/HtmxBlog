@@ -109,14 +109,16 @@ if (app.Environment.IsProduction())
 
 ///********************************************************************************************
 
-app.MapGet("/baseurl", (HttpContext context) =>
-{
-    var baseURL = context.Request.Host;
-    var basepath = context.Request.Path;
-   // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
-    return Results.Ok(baseURL);
-});
-
+app.MapGet(
+    "/baseurl",
+    (HttpContext context) =>
+    {
+        var baseURL = context.Request.Host;
+        var basepath = context.Request.Path;
+        // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
+        return Results.Ok(baseURL);
+    }
+);
 
 app.MapGet(
     "api/static/posts",
@@ -187,52 +189,48 @@ app.MapDelete(
     }
 );
 
-app.MapGet("/html/post0", () =>
-{
-    // You can return HTML from minimal APIs, but it's nothing fancy
-    string html = """
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>Hello from minimal APIs!</title>
-      </head>
-      <body>
-        <p>
-          Hello from Razor Slices! The time is @Model
-        </p>
-      </body>
-      </html>
-      """;
-    return Results.Content(html);
-});
+//*********************  HTML API  *********************************************
+
 
 app.MapGet(
     "/html/post",
-    async (HtmlOptions option,AppDbContext db) =>
+    async (HtmlOptions option, AppDbContext db) =>
     {
+        string json = JsonConvert.SerializeObject(await db.Posts.ToListAsync());
+        List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
+        string ResponseHTML = null;
 
-string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
-List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
-string ResponseHTML=null ;
-
- foreach(var i in item)
-    {
-       //Results.Extensions.HtmlResponse(
-        option.myHTML=@"
-<div class='col mb-auto posts-col-"+i.Id+@"'>
+        foreach (var i in item)
+        {
+            //Results.Extensions.HtmlResponse(
+            option.myHTML =
+                @"
+<div class='col mb-auto posts-col-"
+                + i.Id
+                + @"'>
 
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
-            <h5 class='card-title xtitlename'>"  +i.Title+
-            @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "+i.Id+@"' hx-target='.posts-row'
-            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "+i.Title+@"'
+            <h5 class='card-title xtitlename'>"
+                + i.Title
+                + @"</h5><p class='card-text xcontentname'>"
+                + i.Content
+                + @"</p>
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "
+                + i.Id
+                + @"' hx-target='.posts-row'
+            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + i.Title
+                + @"'
 
             >Delete</a>
 
-            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/"+i.Id+@"' hx-target='.posts-col-"+i.Id+@"'
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html"
+                + i.Id
+                + @"' hx-target='.posts-col-"
+                + i.Id
+                + @"'
              hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
             Update</a>
         </div>
@@ -242,39 +240,59 @@ string ResponseHTML=null ;
 
 </div>
 
-"
-        ;
-    ResponseHTML = ResponseHTML+option.myHTML;
-     option.myHTML=ResponseHTML;
+";
+            ResponseHTML = ResponseHTML + option.myHTML;
+            option.myHTML = ResponseHTML;
+        }
+        return Results.Extensions.HtmlResponse(option.myHTML);
     }
-    return Results.Extensions.HtmlResponse( option.myHTML);
-    }
-
-
-
-
 );
 
+app.MapPut(
+        "/posts/html/{id}",
+        async (int id, [FromForm] Post inputPost, AppDbContext db) =>
+        {
+            var post = await db.Posts.FindAsync(id);
+
+            if (post is null)
+                return Results.NotFound();
+
+            post.Title = inputPost.Title;
+            post.Content = inputPost.Content;
+
+            await db.SaveChangesAsync();
+
+    //         string html = """
+    //   <!DOCTYPE html>
+    //   <html lang="en">
+    //   <head>
+    //     <meta charset="utf-8">
+    //     <title>Hello from minimal APIs!</title>
+    //   </head>
+    //   <body>
+    //     <p>
+    //       Hello from Razor Slices! The time is @Model
+    //     </p>
+    //   </body>
+    //   </html>
+    //   """;
+           // return Results.Content(html);
+           return Results.NoContent();
+        }
+    )
+    .DisableAntiforgery();
 
 app.MapPost(
-    "/posts/html",
-    async ([FromForm] Post post, AppDbContext db) =>
-    {
-        // // string json = JsonConvert.SerializeObject(post);
-        // // List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
+        "/posts/html",
+        async ([FromForm] Post post, AppDbContext db) =>
+        {
+            db.Posts.Add(post);
+            await db.SaveChangesAsync();
 
-        // List<Post> item  =new Post();
-        // item.Id = 0;
-        // item.Title = post.Title;
-        // item.Content= post.Content;
-        // string json = JsonConvert.SerializeObject(item);
-        //   items = JsonConvert.DeserializeObject<List<Post>>(json);
-        db.Posts.Add(post);
-        await db.SaveChangesAsync();
-
-        return Results.Created($"/posts/{post.Id}", post);
-    }
-).DisableAntiforgery();
+            return Results.Created($"/posts/{post.Id}", post);
+        }
+    )
+    .DisableAntiforgery();
 
 /// Use direct call to DBcontext calling API/////////////////////////
 
@@ -298,7 +316,7 @@ app.MapGet(
 
 app.MapPost(
     "/posts",
-    async (Post post, AppDbContext db) =>
+    async ([FromForm] Post post, AppDbContext db) =>
     {
         db.Posts.Add(post);
         await db.SaveChangesAsync();
@@ -309,13 +327,12 @@ app.MapPost(
 
 app.MapPut(
     "/posts/{id}",
-    async (int id,   [FromForm] Post inputPost, AppDbContext db) =>
+    async (int id, [FromForm] Post inputPost, AppDbContext db) =>
     {
         var post = await db.Posts.FindAsync(id);
 
         if (post is null)
             return Results.NotFound();
-
 
         post.Title = inputPost.Title;
         post.Content = inputPost.Content;
@@ -324,7 +341,7 @@ app.MapPut(
 
         return Results.NoContent();
     }
-).DisableAntiforgery();;
+);
 
 app.MapDelete(
     "/posts/{id}",
@@ -391,5 +408,3 @@ public class HtmlOptions
 {
     public string? myHTML { get; set; }
 }
-
-
