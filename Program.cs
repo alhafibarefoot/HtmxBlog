@@ -206,9 +206,14 @@ string ResponseHTML=null ;
         <div class='card-body card-body'>
             <h5 class='card-title xtitlename'>"  +i.Title+
             @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
-            <a href='#' class='btn btn-danger'>Delete</a>
-            <a href='#' class='btn btn-success hx-put='https://localhost:7137/posts/{{"+i.Id+@"}}'
-             hx-target='posts-col-{{"+i.Id+@"}}' hx-include='[name=title] ,[name=content]' hx-validate='true'>Update</a>
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "+i.Id+@"' hx-target='.posts-row'
+            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "+i.Title+@"'
+
+            >Delete</a>
+
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/"+i.Id+@"' hx-target='.posts-col-"+i.Id+@"'
+             hx-include='[name=title] ,[name=content]'>
+            Update</a>
         </div>
 
       </div>

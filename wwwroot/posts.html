@@ -58,11 +58,11 @@
 </head>
 
 <body onload="checkFirstVisit()">
-  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
+  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
-    <form    hx-target=".posts-row"   hx-swap="beforeend">
-      <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" />
+    <form hx-post="https://localhost:7137/posts"   hx-target=".posts-row"   hx-swap="beforeend">
+      <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
 
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
