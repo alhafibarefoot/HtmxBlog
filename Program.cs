@@ -233,7 +233,7 @@ string ResponseHTML=null ;
             >Delete</a>
 
             <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/"+i.Id+@"' hx-target='.posts-col-"+i.Id+@"'
-             hx-include='[id=0],[name=title] ,[name=content]'>
+             hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
             Update</a>
         </div>
 
@@ -258,7 +258,7 @@ string ResponseHTML=null ;
 
 app.MapPost(
     "/posts/html",
-    async ([FromBody] Post post, AppDbContext db) =>
+    async ([FromForm] Post post, AppDbContext db) =>
     {
         // // string json = JsonConvert.SerializeObject(post);
         // // List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
@@ -309,12 +309,13 @@ app.MapPost(
 
 app.MapPut(
     "/posts/{id}",
-    async (int id, Post inputPost, AppDbContext db) =>
+    async (int id,   [FromForm] Post inputPost, AppDbContext db) =>
     {
         var post = await db.Posts.FindAsync(id);
 
         if (post is null)
             return Results.NotFound();
+
 
         post.Title = inputPost.Title;
         post.Content = inputPost.Content;
@@ -323,7 +324,7 @@ app.MapPut(
 
         return Results.NoContent();
     }
-);
+).DisableAntiforgery();;
 
 app.MapDelete(
     "/posts/{id}",

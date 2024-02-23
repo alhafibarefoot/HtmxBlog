@@ -61,8 +61,8 @@
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
-    <form hx-post="https://localhost:7137/posts/html" hx-target=".posts-row" hx-swap="beforeend"  enctype="multipart/form-data" >
-      <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title"  />
+    <form hx-post="https://localhost:7137/posts/html" hx-target=".posts-row" hx-swap="beforeend"  enctype="multipart/form-data" contentType="application/json" >
+      <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0  />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
 
