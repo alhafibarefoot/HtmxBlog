@@ -199,16 +199,19 @@ string ResponseHTML=null ;
     {
        //Results.Extensions.HtmlResponse(
         option.myHTML=@"
-<div class='col mb-auto posts-col-100'>
+<div class='col mb-auto posts-col-"+i.Id+@"'>
 
-    <div class='card mt-5 card-100' style='width: 19.5rem'>
+     <div class='card mt-5 card' style='width: 19.5rem'>
 
-      <div class='card-body card-body-"+i.Id+@"'>
-        <h5 class='card-title xtitlename'>"  +i.Title+
-        @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
-        <a href='#' class='btn btn-danger'>Delete</a>
-        <a href='#' class='btn btn-success'>Update</a>
+        <div class='card-body card-body'>
+            <h5 class='card-title xtitlename'>"  +i.Title+
+            @"</h5><p class='card-text xcontentname'>"+i.Content+@"</p>
+            <a href='#' class='btn btn-danger'>Delete</a>
+            <a href='#' class='btn btn-success'>Update</a>
+        </div>
+
       </div>
+
 
 </div>
 
