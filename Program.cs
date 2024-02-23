@@ -193,7 +193,7 @@ app.MapGet(
 
 string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
 List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
-
+string ResponseHTML ="''";
 
  foreach(var i in item)
     {
@@ -214,7 +214,8 @@ List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
 
 "
         ;
-    option.myHTML = option.myHTML+option.myHTML;
+    ResponseHTML = option.myHTML+ResponseHTML;
+     option.myHTML=ResponseHTML;
     }
     return Results.Extensions.HtmlResponse( option.myHTML);
     }
