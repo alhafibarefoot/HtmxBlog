@@ -193,7 +193,7 @@ app.MapGet(
 
 string json =  JsonConvert.SerializeObject(await db.Posts.ToListAsync());
 List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
-string ResponseHTML ="''";
+string ResponseHTML=null ;
 
  foreach(var i in item)
     {
