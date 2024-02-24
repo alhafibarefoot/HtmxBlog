@@ -205,7 +205,9 @@ app.MapGet(
             //Results.Extensions.HtmlResponse(
             option.myHTML =
                 @"
-<div class='col mb-auto posts-col-"
+<div id=Post-id-"
+                + post.Id
+                + "  class='col mb-auto posts-col-"
                 + post.Id
                 + @"'>
 
@@ -219,8 +221,8 @@ app.MapGet(
                 + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
                 + post.Id
-                + @"' hx-target='.posts-row'
-            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + @"'  hx-trigger='click[removeDiv('Post-id-" + post.Id+@"')]'
+                 hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
                 + post.Title
                 + @"'
 
@@ -265,7 +267,9 @@ app.MapPut(
 
             return Results.Extensions.HtmlResponse(
                 @"
-<div class='col mb-auto posts-col-"
+<div id=Post-id-"
+                    + post.Id
+                    + "  class='col mb-auto posts-col-"
                     + post.Id
                     + @"'>
 
@@ -315,7 +319,9 @@ app.MapPost(
 
             return Results.Extensions.HtmlResponse(
                 @"
-<div class='col mb-auto posts-col-"
+<div id=Post-id-"
+                    + post.Id
+                    + "  class='col mb-auto posts-col-"
                     + post.Id
                     + @"'>
 
@@ -364,16 +370,10 @@ app.MapDelete(
             {
                 db.Posts.Remove(post);
                 await db.SaveChangesAsync();
-                return Results.Extensions.HtmlResponse(
-                    @"
-row.removeChild(document.getElementByName('posts-col-"
-                        + id
-                        + @");
+                return Results.Ok();
 
-"
-                );
             }
-            return Results.NotFound();
+            return Results.NotFound("Sorry Item not Exsists");
         }
     )
     .DisableAntiforgery();

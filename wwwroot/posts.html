@@ -20,6 +20,13 @@
     </script>
 
   <script>
+
+function removeDiv( div ) {
+
+  const element = document.getElementById(div);
+  element.remove();
+}
+
     function checkFirstVisit() {
       if (document.cookie.indexOf('mycookie') == -1) {
         // The cookie doesn't exist. Create it now
