@@ -221,7 +221,10 @@ app.MapGet(
                 + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
                 + post.Id
-                + @"'    hx-swap='delete' hx-trigger='click[removeDiv('Post-id-" + post.Id+@"')]'
+                + @"'    hx-target='.posts-col-"
+                + post.Id
+                + @"' hx-swap='delete'
+                )]'
                  hx-confirm='Are you sure you wish to delete this Post? Titled : "
                 + post.Title
                 + @"'
@@ -281,12 +284,15 @@ app.MapPut(
                     + @"</h5><p class='card-text xcontentname'>"
                     + post.Content
                     + @"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
-                    + post.Id
-                    + @"' hx-target='.posts-row'
-            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                    + post.Title
-                    + @"'
+             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+                + post.Id
+                + @"'    hx-target='.posts-col-"
+                + post.Id
+                + @"' hx-swap='delete'
+                )]'
+                 hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + post.Title
+                + @"'
 
             >Delete</a>
 
@@ -334,11 +340,14 @@ app.MapPost(
                     + post.Content
                     + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
-                    + post.Id
-                    + @"' hx-target='.posts-row'
-            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                    + post.Title
-                    + @"'
+                + post.Id
+                + @"'    hx-target='.posts-col-"
+                + post.Id
+                + @"' hx-swap='delete'
+                )]'
+                 hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + post.Title
+                + @"'
 
             >Delete</a>
 
@@ -371,7 +380,6 @@ app.MapDelete(
                 db.Posts.Remove(post);
                 await db.SaveChangesAsync();
                 return Results.Ok();
-
             }
             return Results.NotFound("Sorry Item not Exsists");
         }
