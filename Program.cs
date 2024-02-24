@@ -432,7 +432,7 @@ app.MapPut(
 
         return Results.NoContent();
     }
-);
+) .DisableAntiforgery();
 
 app.MapDelete(
     "/posts/{id}",
