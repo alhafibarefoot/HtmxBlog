@@ -3,6 +3,7 @@ using HtmxBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Web;
@@ -407,8 +408,10 @@ app.MapGet(
 
 app.MapPost(
     "/posts",
-    async ([FromForm] Post post, AppDbContext db) =>
+    async (Post post, AppDbContext db) =>
     {
+        //      //items[0].Title=post.Title;
+
         db.Posts.Add(post);
         await db.SaveChangesAsync();
 
@@ -418,21 +421,21 @@ app.MapPost(
 
 app.MapPut(
     "/posts/{id}",
-    async (int id, [FromForm] Post inputPost, AppDbContext db) =>
+    async (int id, Post inputPost, AppDbContext db) =>
     {
         var post = await db.Posts.FindAsync(id);
 
         if (post is null)
             return Results.NotFound();
 
-        post.Title = inputPost.Title;
-        post.Content = inputPost.Content;
+        post.Title = inputPost.Title.ToString();
+        post.Content = inputPost.Content.ToString();
 
         await db.SaveChangesAsync();
 
         return Results.NoContent();
     }
-) .DisableAntiforgery();
+);
 
 app.MapDelete(
     "/posts/{id}",

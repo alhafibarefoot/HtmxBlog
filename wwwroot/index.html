@@ -41,9 +41,9 @@
 
       encodeParameters: function (xhr, parameters, elt) {
         xhr.overrideMimeType("text/json");
-
+        location.reload();
         return JSON.stringify(parameters);
-        //location.reload();
+
       },
     });
   </script>
@@ -58,12 +58,12 @@
 </head>
 
 <body onload="checkFirstVisit()">
-  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
+  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
     <form hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json">
+      enctype="multipart/form-data" contentType="application/json" hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
       <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -72,15 +72,16 @@
         wrap="virtual"></textarea>
 
       <button class="btn btn-primary mb-3">Add Post</button>
+      <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
+        height="100" />
 
     </form>
 
 
     <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts" hx-trigger="load once"
-      mustache-array-template="posts-template" hx-trigger="load once">
+      mustache-array-template="posts-template" hx-trigger="load once" hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
 
-      <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="30"
-        height="30" />
+
       <div id="Post-id-{{id}}" class="col mb-auto posts-col" mustache-array-template="posts-template">
         <template id="posts-template">
           {{#data}}
@@ -95,8 +96,8 @@
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
               <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
-                hx-include="[name=id],[name=title] ,[name=content]" hx-validate="true"
-                hx-vals="js:{'': changeText({{id}})}">
+                 hx-validate="true" hx-include="[name=id],[name=title] ,[name=content]"
+                >
                 Update</a>
 
               <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none"
