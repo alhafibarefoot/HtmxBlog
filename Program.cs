@@ -221,8 +221,8 @@ app.MapGet(
                 + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
                 + post.Id
-                + @"'  hx-trigger='click[removeDiv('Post-id-" + post.Id+@"')]'
-                 hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                + @"'    hx-swap='delete' hx-trigger='click[removeDiv('Post-id-" + post.Id+@"')]'
+                 hx-confirm='Are you sure you wish to delete this Post? Titled : "
                 + post.Title
                 + @"'
 
