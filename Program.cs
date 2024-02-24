@@ -200,36 +200,37 @@ app.MapGet(
         List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
         string ResponseHTML = null;
 
-        foreach (var i in item)
+        foreach (var post in item)
         {
             //Results.Extensions.HtmlResponse(
             option.myHTML =
                 @"
 <div class='col mb-auto posts-col-"
-                + i.Id
+                + post.Id
                 + @"'>
 
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
             <h5 class='card-title xtitlename'>"
-                + i.Title
+                + post.Title
                 + @"</h5><p class='card-text xcontentname'>"
-                + i.Content
+                + post.Content
                 + @"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "
-                + i.Id
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+                + post.Id
                 + @"' hx-target='.posts-row'
             hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                + i.Title
+                + post.Title
                 + @"'
 
             >Delete</a>
 
             <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
-                + i.Id
+                + post.Id
                 + @"' hx-target='.posts-col-"
-                + i.Id
+                + post.Id
+                + 1
                 + @"'
              hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
             Update</a>
@@ -250,7 +251,7 @@ app.MapGet(
 
 app.MapPut(
         "/posts/html/{id}",
-        async (HtmlOptions option,int id, [FromForm] Post inputPost, AppDbContext db) =>
+        async (int id, [FromForm] Post inputPost, AppDbContext db) =>
         {
             var post = await db.Posts.FindAsync(id);
 
@@ -262,34 +263,34 @@ app.MapPut(
 
             await db.SaveChangesAsync();
 
-             option.myHTML =
+            return Results.Extensions.HtmlResponse(
                 @"
 <div class='col mb-auto posts-col-"
-                + post.Id
-                + @"'>
+                    + post.Id
+                    + @"'>
 
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
             <h5 class='card-title xtitlename'>"
-                + post.Title
-                + @"</h5><p class='card-text xcontentname'>"
-                + post.Content
-                + @"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/ "
-                + post.Id
-                + @"' hx-target='.posts-row'
+                    + post.Title
+                    + @"</h5><p class='card-text xcontentname'>"
+                    + post.Content
+                    + @"</p>
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+                    + post.Id
+                    + @"' hx-target='.posts-row'
             hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                + post.Title
-                + @"'
+                    + post.Title
+                    + @"'
 
             >Delete</a>
 
             <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
-                + post.Id
-                + @"' hx-target='.posts-col-"
-                + post.Id
-                + @"'
+                    + post.Id
+                    + @"' hx-target='.posts-col-"
+                    + post.Id
+                    + @"'
              hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
             Update</a>
         </div>
@@ -299,9 +300,8 @@ app.MapPut(
 
 </div>
 
-";
-
-     return Results.Extensions.HtmlResponse(option.myHTML);
+"
+            );
         }
     )
     .DisableAntiforgery();
@@ -313,7 +313,67 @@ app.MapPost(
             db.Posts.Add(post);
             await db.SaveChangesAsync();
 
-            return Results.Created($"/posts/{post.Id}", post);
+            return Results.Extensions.HtmlResponse(
+                @"
+<div class='col mb-auto posts-col-"
+                    + post.Id
+                    + @"'>
+
+     <div class='card mt-5 card' style='width: 19.5rem'>
+
+        <div class='card-body card-body'>
+            <h5 class='card-title xtitlename'>"
+                    + post.Title
+                    + @"</h5><p class='card-text xcontentname'>"
+                    + post.Content
+                    + @"</p>
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+                    + post.Id
+                    + @"' hx-target='.posts-row'
+            hx-swap='delete' hx-confirm='Are you sure you wish to delete this Post? Titled : "
+                    + post.Title
+                    + @"'
+
+            >Delete</a>
+
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
+                    + post.Id
+                    + @"' hx-target='.posts-col-"
+                    + post.Id
+                    + @"'
+             hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
+            Update</a>
+        </div>
+
+      </div>
+
+
+</div>
+
+"
+            );
+        }
+    )
+    .DisableAntiforgery();
+
+app.MapDelete(
+        "/posts/html/{id}",
+        async (int id, AppDbContext db) =>
+        {
+            if (await db.Posts.FindAsync(id) is Post post)
+            {
+                db.Posts.Remove(post);
+                await db.SaveChangesAsync();
+                return Results.Extensions.HtmlResponse(
+                    @"
+row.removeChild(document.getElementByName('posts-col-"
+                        + id
+                        + @");
+
+"
+                );
+            }
+            return Results.NotFound();
         }
     )
     .DisableAntiforgery();
