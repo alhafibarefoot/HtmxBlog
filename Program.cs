@@ -235,7 +235,6 @@ app.MapGet(
                 + post.Id
                 + @"' hx-target='.posts-col-"
                 + post.Id
-                + 1
                 + @"'
              hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
             Update</a>
@@ -285,14 +284,14 @@ app.MapPut(
                     + post.Content
                     + @"</p>
              <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
-                + post.Id
-                + @"'    hx-target='.posts-col-"
-                + post.Id
-                + @"' hx-swap='delete'
+                    + post.Id
+                    + @"'    hx-target='.posts-col-"
+                    + post.Id
+                    + @"' hx-swap='delete'
                 )]'
                  hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                + post.Title
-                + @"'
+                    + post.Title
+                    + @"'
 
             >Delete</a>
 
@@ -340,14 +339,14 @@ app.MapPost(
                     + post.Content
                     + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
-                + post.Id
-                + @"'    hx-target='.posts-col-"
-                + post.Id
-                + @"' hx-swap='delete'
+                    + post.Id
+                    + @"'    hx-target='.posts-col-"
+                    + post.Id
+                    + @"' hx-swap='delete'
                 )]'
                  hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                + post.Title
-                + @"'
+                    + post.Title
+                    + @"'
 
             >Delete</a>
 
