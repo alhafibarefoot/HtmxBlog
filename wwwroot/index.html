@@ -60,13 +60,12 @@
 
 <body onload="checkFirstVisit()">
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center"
-    hx-ext="Alhafi-JSON-Accept-type,client-side-templates" mustache-array-template="posts-template">
+    hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
     <form hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json"
-      hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
+      enctype="multipart/form-data" contentType="application/json">
       <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -81,13 +80,14 @@
     </form>
 
 
-    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts" hx-trigger="load once">
+    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
+      mustache-array-template="posts-template" hx-trigger="load once">
 
 
-      <div id="Post-id-{{id}}" class="col mb-auto posts-col">
+      <div id="Post-id" class="col mb-auto posts-col">
         <template id="posts-template">
           {{#data}}
-          <div class="card mt-5 card-{{id}}" style="width: 19.5rem">
+          <div id="CardNo" class="card mt-5 card-{{id}}" style="width: 19.5rem">
             <div class="card-body">
               <h5 class="card-title xtitlename" id="xtitleID-{{id}}">{{title}}</h5>
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
@@ -112,7 +112,7 @@
     </div>
   </div>
 
-
+  <div id="postContent"></div>
 </body>
 
 </html>
