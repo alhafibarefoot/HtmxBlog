@@ -84,27 +84,27 @@
 
 
     <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json" ></form>>
-    <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
+      enctype="multipart/form-data" contentType="application/json">
+      <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
-    <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
+      <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
 
-    <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
-      wrap="virtual"></textarea>
+      <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
+        wrap="virtual"></textarea>
 
-      <form hx-encoding='multipart/form-data' hx-post='/upload'
-      _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'>
-      <input type='file' name='file'>
-      <button>
+
+      <input type='file' name='file' class="form-control" name="postImage">
+      <button hx-post='/upload' hx-encoding='multipart/form-data'
+        _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100' hx-target="#postContent">
         Upload
       </button>
       <progress id='progress' value='0' max='100'></progress>
-    </form>
-    <button class="btn btn-primary mb-3">Add Post</button>
+
+      <button class="btn btn-primary mb-3">Add Post</button>
 
 
-    <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
-      height="100" />
+      <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
+        height="100" />
 
     </form>
 
@@ -118,7 +118,7 @@
           {{#data}}
           <div id="CardNo" class="card mt-5 card-{{id}}" style="width: 19.5rem">
             <div class="card-body">
-              <img src="{{postImage}}">
+              <img  id="postImageID-{{id}}" src="{{postImage}}">
               <h5 class="card-title xtitlename" id="xtitleID-{{id}}">{{title}}</h5>
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}

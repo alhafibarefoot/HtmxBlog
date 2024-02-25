@@ -26,6 +26,16 @@ var varPostist = new List<PostStatic>
     }
 };
 
+static string CreateTempfilePath(string fileName)
+{
+   // var filename = $"{Guid.NewGuid()}.tmp";
+    var filename = fileName;
+    var directoryPath = Path.Combine("./wwwroot/assests/img/loaded", "uploads");
+    if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
+
+    return Path.Combine(directoryPath, filename);
+}
+
 ///
 // Add services to the container.
 builder.Services.AddControllers().AddXmlSerializerFormatters().AddNewtonsoftJson();
@@ -35,6 +45,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.WriteIndented = true;
     options.SerializerOptions.IncludeFields = true;
 });
+builder.Services.AddAntiforgery();
 
 builder.Services.AddSingleton(new HtmlOptions { myHTML = "" });
 builder.Services.AddEndpointsApiExplorer();
@@ -463,31 +474,30 @@ app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext contex
 });
 //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
 
-// Add my file upload endpoint
-app.MapPost("/upload_many", async (IFormFileCollection myFiles) =>
+app.MapPost("/upload", async(IFormFile file) =>
+{
+     String fileName = file.FileName;
+    string tempfile = CreateTempfilePath(fileName);
+    using var stream = File.OpenWrite(tempfile);
+    await file.CopyToAsync(stream);
+
+    // dom more fancy stuff with the IFormFile
+}).DisableAntiforgery();
+
+app.MapPost("/uploadmany", async (IFormFileCollection myFiles) =>
 {
     foreach (var file in myFiles)
     {
-        // ...
+          String fileName = file.FileName;
+        string tempfile = CreateTempfilePath(fileName);
+        using var stream = File.OpenWrite(tempfile);
+        await file.CopyToAsync(stream);
+
+        // dom more fancy stuff with the IFormFile
     }
+}).DisableAntiforgery();;
 
-    return TypedResults.Ok("Ayo, I got your files!");
-});
 
-app.MapPost("/upload",
-    async (HttpRequest request) =>
-    {
-        using (var reader = new StreamReader(request.Body, System.Text.Encoding.UTF8))
-        {
-
-            // Read the raw file as a `string`.
-            string fileContent = await reader.ReadToEndAsync();
-
-            // Do something with `fileContent`...
-
-            return "File Was Processed Sucessfully!";
-        }
-    }).Accepts<IFormFile>("text/plain");
 ///********************************************************************************************
 
 app.UseHttpsRedirection();
@@ -538,3 +548,5 @@ public class HtmlOptions
 {
     public string? myHTML { get; set; }
 }
+
+
