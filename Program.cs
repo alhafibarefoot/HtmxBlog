@@ -1,6 +1,11 @@
+using System.Net.Mime;
+using System.Text;
 using HtmxBlog.Data;
 using HtmxBlog.Models;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
