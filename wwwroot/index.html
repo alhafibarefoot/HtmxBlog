@@ -64,7 +64,8 @@
 
 
     <form hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json" hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
+      enctype="multipart/form-data" contentType="application/json"
+      hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
       <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -80,7 +81,8 @@
 
 
     <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts" hx-trigger="load once"
-      mustache-array-template="posts-template" hx-trigger="load once" hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
+      mustache-array-template="posts-template" hx-trigger="load once"
+      hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
 
 
       <div id="Post-id-{{id}}" class="col mb-auto posts-col" mustache-array-template="posts-template">
@@ -97,8 +99,7 @@
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
               <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
-                 hx-validate="true" hx-include="[name=id],[name=title] ,[name=content]"
-                >
+                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content]">
                 Update</a>
 
               <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none"
