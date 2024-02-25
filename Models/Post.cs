@@ -15,6 +15,8 @@ namespace HtmxBlog.Models
 
         public string? Content { get; set; }
 
+        public string? postImage { get; set; }
+
 
 
     }
