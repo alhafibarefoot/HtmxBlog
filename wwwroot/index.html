@@ -43,7 +43,7 @@
         xhr.overrideMimeType("text/json");
 
         return JSON.stringify(parameters);
-       // location.reload();
+        // location.reload();
 
       },
     });
@@ -59,7 +59,8 @@
 </head>
 
 <body onload="checkFirstVisit()">
-  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center"  hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
+  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center"
+    hx-ext="Alhafi-JSON-Accept-type,client-side-templates" mustache-array-template="posts-template">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
@@ -80,11 +81,10 @@
     </form>
 
 
-    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts" hx-trigger="load once"
-      mustache-array-template="posts-template" >
+    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts" hx-trigger="load once">
 
 
-      <div id="Post-id-{{id}}" class="col mb-auto posts-col" mustache-array-template="posts-template">
+      <div id="Post-id-{{id}}" class="col mb-auto posts-col">
         <template id="posts-template">
           {{#data}}
           <div class="card mt-5 card-{{id}}" style="width: 19.5rem">
