@@ -484,7 +484,8 @@ app.MapPost("/upload", async(IFormFile ? file) =>
     await file.CopyToAsync(stream);
 
     // dom more fancy stuff with the IFormFile
-}).DisableAntiforgery();
+}).DisableAntiforgery()
+.Accepts<IFormFile>("multipart/form-data");
 
 app.MapPost("/uploadmany", async (IFormFileCollection myFiles) =>
 {
@@ -497,7 +498,30 @@ app.MapPost("/uploadmany", async (IFormFileCollection myFiles) =>
 
         // dom more fancy stuff with the IFormFile
     }
-}).DisableAntiforgery();;
+}).DisableAntiforgery()
+.Accepts<IFormFile>("multipart/form-data");
+
+app.MapPost("/upload2",
+    async Task<IResult>(HttpRequest request) =>
+    {
+        if (!request.HasFormContentType)
+            return Results.BadRequest();
+
+        var form = await request.ReadFormAsync();
+        var formFile = form.Files["file"];
+
+        if (formFile is null || formFile.Length == 0)
+            return Results.BadRequest();
+
+        await using var stream = formFile.OpenReadStream();
+
+        var reader = new StreamReader(stream);
+        var text = await reader.ReadToEndAsync();
+
+        return Results.Ok(text);
+    }).DisableAntiforgery()
+.Accepts<IFormFile>("multipart/form-data");
+
 
 
 ///********************************************************************************************

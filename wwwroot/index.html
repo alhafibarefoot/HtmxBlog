@@ -93,8 +93,8 @@
         wrap="virtual"></textarea>
 
 
-      <input type='file' name='file' class="form-control" name="postImage">
-      <button hx-post='/upload' hx-encoding='multipart/form-data'
+      <input type='file' name='file' class="form-control" >
+      <button hx-post='/upload2' hx-encoding='multipart/form-data'
         _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100' hx-target="#postContent">
         Upload
       </button>
@@ -107,7 +107,7 @@
         height="100" />
 
     </form>
-    <form hx-encoding='multipart/form-data' hx-post='/upload'
+    <form enctype="multipart/form-data" hx-encoding='multipart/form-data' hx-post='/upload'
       _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'>
       <input type='file' name='file' accept="*/*"  class="form-control">
       <button>
