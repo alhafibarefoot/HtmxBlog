@@ -418,7 +418,7 @@ app.MapGet(
 
 app.MapPost(
     "/posts",
-    async (Post post, AppDbContext db) =>
+    async ( Post  post, AppDbContext db) =>
     {
         //      //items[0].Title=post.Title;
 
@@ -427,7 +427,8 @@ app.MapPost(
 
         return Results.Created($"/posts/{post.Id}", post);
     }
-);
+).DisableAntiforgery()
+.Accepts<IFormFile>("multipart/form-data");
 
 app.MapPut(
     "/posts/{id}",
@@ -445,7 +446,8 @@ app.MapPut(
 
         return Results.NoContent();
     }
-);
+).DisableAntiforgery()
+.Accepts<IFormFile>("multipart/form-data");
 
 app.MapDelete(
     "/posts/{id}",

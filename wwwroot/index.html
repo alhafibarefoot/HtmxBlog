@@ -84,7 +84,7 @@
 
 
     <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json">
+    hx-encoding='multipart/form-data'>
       <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -93,12 +93,12 @@
         wrap="virtual"></textarea>
 
 
-      <input type='file' name='file' class="form-control" >
+      <!-- <input type='file' name='file' class="form-control" >
       <button hx-post='/upload2' hx-encoding='multipart/form-data'
         _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100' hx-target="#postContent">
         Upload
       </button>
-      <progress id='progress' value='0' max='100'></progress>
+      <progress id='progress' value='0' max='100'></progress> -->
 
       <button class="btn btn-primary mb-3">Add Post</button>
 
