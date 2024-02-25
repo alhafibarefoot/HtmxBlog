@@ -109,12 +109,12 @@
     </form>
     <form hx-encoding='multipart/form-data' hx-post='/upload'
       _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'>
-    <input type='file' name='file'>
-    <button>
+      <input type='file' name='file' accept="*/*"  class="form-control">
+      <button>
         Upload
-    </button>
-    <progress id='progress' value='0' max='100'></progress>
-</form>
+      </button>
+      <progress id='progress' value='0' max='100'></progress>
+    </form>
 
     <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
       mustache-array-template="posts-template" hx-trigger="load once">
@@ -125,7 +125,7 @@
           {{#data}}
           <div id="CardNo" class="card mt-5 card-{{id}}" style="width: 19.5rem">
             <div class="card-body">
-              <img  id="postImageID-{{id}}" src="{{postImage}}">
+              <img id="postImageID-{{id}}" src="{{postImage}}">
               <h5 class="card-title xtitlename" id="xtitleID-{{id}}">{{title}}</h5>
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}

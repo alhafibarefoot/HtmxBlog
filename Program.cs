@@ -474,8 +474,10 @@ app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext contex
 });
 //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
 
-app.MapPost("/upload", async(IFormFile file) =>
+app.MapPost("/upload", async(IFormFile ? file) =>
 {
+
+    //HttpContext.Response.Headers.Add("Content-Type", "application/json");
      String fileName = file.FileName;
     string tempfile = CreateTempfilePath(fileName);
     using var stream = File.OpenWrite(tempfile);
