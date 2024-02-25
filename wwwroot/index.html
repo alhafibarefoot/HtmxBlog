@@ -41,8 +41,9 @@
 
       encodeParameters: function (xhr, parameters, elt) {
         xhr.overrideMimeType("text/json");
-        location.reload();
+
         return JSON.stringify(parameters);
+        location.reload();
 
       },
     });
