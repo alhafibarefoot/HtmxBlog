@@ -36,13 +36,25 @@
         if (name === "htmx:configRequest") {
 
           evt.detail.headers["Content-Type"] = "application/json";
+          evt.detail.headers["Access-Control-Allow-Origin"] = "*";
+          // evt.detail.headers["Vary"] = "HX-Request";
+          //evt.detail.headers["X-API-Key"]= "sjk_xxx";
+
+
         }
       },
 
       encodeParameters: function (xhr, parameters, elt) {
         xhr.overrideMimeType("text/json");
-
+        // const body = { // set your request body
+        //   data: parameters,
+        //   options: { submissionFormat: 'pretty' }
+        // }
+        //console.log('['+ parameters + ']');
         return JSON.stringify(parameters);
+
+        //return JSON.stringify(  body );
+
         // location.reload();
 
       },
