@@ -3,10 +3,8 @@ using HtmxBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Net.Mime;
 using System.Text;
-using System.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
