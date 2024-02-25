@@ -1,10 +1,6 @@
 using HtmxBlog.Data;
 using HtmxBlog.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Net.Mime;
-using System.Text;
+using Microsoft.AspNetCore.Antiforgery;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -450,8 +446,45 @@ app.MapDelete(
     }
 );
 
-///********************************************************************************************
+///*******************************File Upload *************************************************************
 ///
+
+// Get token
+app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext context) =>
+{
+    var tokens = forgeryService.GetAndStoreTokens(context);
+    var xsrfToken = tokens.RequestToken!;
+    return TypedResults.Content(xsrfToken, "text/plain");
+});
+//.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
+
+// Add my file upload endpoint
+app.MapPost("/upload_many", async (IFormFileCollection myFiles) =>
+{
+    foreach (var file in myFiles)
+    {
+        // ...
+    }
+
+    return TypedResults.Ok("Ayo, I got your files!");
+});
+
+app.MapPost("/upload",
+    async (HttpRequest request) =>
+    {
+        using (var reader = new StreamReader(request.Body, System.Text.Encoding.UTF8))
+        {
+
+            // Read the raw file as a `string`.
+            string fileContent = await reader.ReadToEndAsync();
+
+            // Do something with `fileContent`...
+
+            return "File Was Processed Sucessfully!";
+        }
+    }).Accepts<IFormFile>("text/plain");
+///********************************************************************************************
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("MyAllowedOrigins");
