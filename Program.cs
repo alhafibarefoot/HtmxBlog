@@ -483,7 +483,7 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async ([FromForm] IFormFile? file) =>
+        async (  IFormFile? file) =>
         {
             //HttpContext.Response.Headers.Add("Content-Type", "application/json");
             String fileName = file.FileName;
@@ -499,7 +499,7 @@ app.MapPost(
 
 app.MapPost(
         "/uploadmany",
-        async ([FromForm]IFormFileCollection myFiles) =>
+        async (IFormFileCollection myFiles) =>
         {
             foreach (var file in myFiles)
             {
