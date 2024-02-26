@@ -247,7 +247,7 @@ app.MapGet(
                 + @"' hx-target='.posts-col-"
                 + post.Id
                 + @"'
-             hx-indicator='#indicator' hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
+              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' hx-encoding='multipart/form-data' >
             Update</a>
         </div>
 
@@ -311,7 +311,7 @@ app.MapPut(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  hx-encoding='multipart/form-data' >
             Update</a>
         </div>
 
@@ -366,7 +366,7 @@ app.MapPost(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' contentType='application/json'>
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  hx-encoding='multipart/form-data'  >
             Update</a>
         </div>
 
