@@ -28,10 +28,11 @@ var varPostist = new List<PostStatic>
 
 static string CreateTempfilePath(string fileName)
 {
-   // var filename = $"{Guid.NewGuid()}.tmp";
+    // var filename = $"{Guid.NewGuid()}.tmp";
     var filename = fileName;
     var directoryPath = Path.Combine("./wwwroot/assests/img/loaded", "uploads");
-    if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
+    if (!Directory.Exists(directoryPath))
+        Directory.CreateDirectory(directoryPath);
 
     return Path.Combine(directoryPath, filename);
 }
@@ -93,8 +94,8 @@ builder.Services.AddCors(options =>
     );
 });
 
-builder.Services.AddDbContext<AppDbContext>(
-    x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+builder.Services.AddDbContext<AppDbContext>(x =>
+    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 var app = builder.Build();
@@ -417,37 +418,37 @@ app.MapGet(
 );
 
 app.MapPost(
-    "/posts",
-    async ( [FromBody] Post  post, AppDbContext db) =>
-    {
-        //      //items[0].Title=post.Title;
+        "/posts",
+        async ([FromBody] Post post, AppDbContext db) =>
+        {
+            //      //items[0].Title=post.Title;
 
-        db.Posts.Add(post);
-        await db.SaveChangesAsync();
+            db.Posts.Add(post);
+            await db.SaveChangesAsync();
 
-        return Results.Created($"/posts/{post.Id}", post);
-    }
-).DisableAntiforgery();
-
+            return Results.Created($"/posts/{post.Id}", post);
+        }
+    )
+    .DisableAntiforgery();
 
 app.MapPut(
-    "/posts/{id}",
-    async (int id,  [FromBody] Post inputPost, AppDbContext db) =>
-    {
-        var post = await db.Posts.FindAsync(id);
+        "/posts/{id}",
+        async (int id, [FromBody] Post inputPost, AppDbContext db) =>
+        {
+            var post = await db.Posts.FindAsync(id);
 
-        if (post is null)
-            return Results.NotFound();
+            if (post is null)
+                return Results.NotFound();
 
-        post.Title = inputPost.Title.ToString();
-        post.Content = inputPost.Content.ToString();
+            post.Title = inputPost.Title.ToString();
+            post.Content = inputPost.Content.ToString();
 
-        await db.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
-        return Results.NoContent();
-    }
-).DisableAntiforgery();
-
+            return Results.NoContent();
+        }
+    )
+    .DisableAntiforgery();
 
 app.MapDelete(
     "/posts/{id}",
@@ -468,63 +469,75 @@ app.MapDelete(
 ///
 
 // Get token
-app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext context) =>
-{
-    var tokens = forgeryService.GetAndStoreTokens(context);
-    var xsrfToken = tokens.RequestToken!;
-    return TypedResults.Content(xsrfToken, "text/plain");
-});
+app.MapGet(
+    "antiforgery/token",
+    (IAntiforgery forgeryService, HttpContext context) =>
+    {
+        var tokens = forgeryService.GetAndStoreTokens(context);
+        var xsrfToken = tokens.RequestToken!;
+        return TypedResults.Content(xsrfToken, "text/plain");
+    }
+);
+
 //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
 
-app.MapPost("/upload", async(IFormFile ? file) =>
-{
+app.MapPost(
+        "/upload",
+        async (IFormFile? file) =>
+        {
+            //HttpContext.Response.Headers.Add("Content-Type", "application/json");
+            String fileName = file.FileName;
+            string tempfile = CreateTempfilePath(fileName);
+            using var stream = File.OpenWrite(tempfile);
+            await file.CopyToAsync(stream);
 
-    //HttpContext.Response.Headers.Add("Content-Type", "application/json");
-     String fileName = file.FileName;
-    string tempfile = CreateTempfilePath(fileName);
-    using var stream = File.OpenWrite(tempfile);
-    await file.CopyToAsync(stream);
+            // dom more fancy stuff with the IFormFile
+        }
+    )
+    .DisableAntiforgery()
+    .Accepts<IFormFile>("multipart/form-data");
 
-    // dom more fancy stuff with the IFormFile
-}).DisableAntiforgery()
-.Accepts<IFormFile>("multipart/form-data");
+app.MapPost(
+        "/uploadmany",
+        async (IFormFileCollection myFiles) =>
+        {
+            foreach (var file in myFiles)
+            {
+                String fileName = file.FileName;
+                string tempfile = CreateTempfilePath(fileName);
+                using var stream = File.OpenWrite(tempfile);
+                await file.CopyToAsync(stream);
 
-app.MapPost("/uploadmany", async (IFormFileCollection myFiles) =>
-{
-    foreach (var file in myFiles)
-    {
-          String fileName = file.FileName;
-        string tempfile = CreateTempfilePath(fileName);
-        using var stream = File.OpenWrite(tempfile);
-        await file.CopyToAsync(stream);
+                // dom more fancy stuff with the IFormFile
+            }
+        }
+    )
+    .DisableAntiforgery()
+    .Accepts<IFormFile>("multipart/form-data");
 
-        // dom more fancy stuff with the IFormFile
-    }
-}).DisableAntiforgery()
-.Accepts<IFormFile>("multipart/form-data");
+app.MapPost(
+        "/upload2",
+        async Task<IResult> (HttpRequest request) =>
+        {
+            if (!request.HasFormContentType)
+                return Results.BadRequest();
 
-app.MapPost("/upload2",
-    async Task<IResult>(HttpRequest request) =>
-    {
-        if (!request.HasFormContentType)
-            return Results.BadRequest();
+            var form = await request.ReadFormAsync();
+            var formFile = form.Files["file"];
 
-        var form = await request.ReadFormAsync();
-        var formFile = form.Files["file"];
+            if (formFile is null || formFile.Length == 0)
+                return Results.BadRequest();
 
-        if (formFile is null || formFile.Length == 0)
-            return Results.BadRequest();
+            await using var stream = formFile.OpenReadStream();
 
-        await using var stream = formFile.OpenReadStream();
+            var reader = new StreamReader(stream);
+            var text = await reader.ReadToEndAsync();
 
-        var reader = new StreamReader(stream);
-        var text = await reader.ReadToEndAsync();
-
-        return Results.Ok(text);
-    }).DisableAntiforgery()
-.Accepts<IFormFile>("multipart/form-data");
-
-
+            return Results.Ok(text);
+        }
+    )
+    .DisableAntiforgery()
+    .Accepts<IFormFile>("multipart/form-data");
 
 ///********************************************************************************************
 
@@ -576,5 +589,3 @@ public class HtmlOptions
 {
     public string? myHTML { get; set; }
 }
-
-
