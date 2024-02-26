@@ -248,7 +248,7 @@ app.MapGet(
                 + @"' hx-target='.posts-col-"
                 + post.Id
                 + @"'
-              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' enctype='multipart/form-data' hx-encoding='multipart/form-data' >
+              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  >
             Update</a>
         </div>
 
@@ -312,7 +312,7 @@ app.MapPut(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  hx-encoding='multipart/form-data' >
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  >
             Update</a>
         </div>
 
@@ -367,7 +367,7 @@ app.MapPost(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  hx-encoding='multipart/form-data'  >
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'   >
             Update</a>
         </div>
 
@@ -483,7 +483,7 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async (  IFormFile? file) =>
+        async ([FromForm]  IFormFile? file) =>
         {
             //HttpContext.Response.Headers.Add("Content-Type", "application/json");
             String fileName = file.FileName;
@@ -516,28 +516,35 @@ app.MapPost(
     .Accepts<IFormFile>("multipart/form-data");
 
 app.MapPost(
-        "/upload2",
-        async Task<IResult> (HttpRequest request) =>
+        "/v0/upload",
+        async Task<IResult> ([FromForm] IFormFile request) =>
         {
-            if (!request.HasFormContentType)
-                return Results.BadRequest();
 
-            var form = await request.ReadFormAsync();
-            var formFile = form.Files["file"];
+                String fileName = request.FileName;
+                string tempfile = CreateTempfilePath(fileName);
 
-            if (formFile is null || formFile.Length == 0)
-                return Results.BadRequest();
 
-            await using var stream = formFile.OpenReadStream();
+           // var form = await request.OpenReadStream();
+            //var formFile = form.Files["file"];
 
-            var reader = new StreamReader(stream);
-            var text = await reader.ReadToEndAsync();
+            // if (request is null || request.Length == 0)
+            //     return Results.BadRequest();
 
-            return Results.Ok(text);
+            //await using var stream = request.OpenReadStream();
+
+            //  var reader = new StreamReader(stream);
+            //  var text = await reader.ReadToEndAsync();
+            //  return Results.Ok(text);
+
+            using var stream = File.OpenWrite(tempfile);
+                await request.CopyToAsync(stream);
+            return Results.Ok();
         }
     )
     .DisableAntiforgery()
     .Accepts<IFormFile>("multipart/form-data");
+
+
 
 ///********************************************************************************************
 
