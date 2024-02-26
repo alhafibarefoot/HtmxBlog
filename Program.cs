@@ -419,7 +419,7 @@ app.MapGet(
 
 app.MapPost(
         "/posts",
-        async ( [FromForm] Post post, AppDbContext db) =>
+        async ([FromForm] Post post, AppDbContext db) =>
         {
             //      //items[0].Title=post.Title;
 
@@ -433,7 +433,7 @@ app.MapPost(
 
 app.MapPut(
         "/posts/{id}",
-        async (int id, [FromForm]  Post inputPost, AppDbContext db) =>
+        async (int id, [FromForm] Post inputPost, AppDbContext db) =>
         {
             var post = await db.Posts.FindAsync(id);
 
@@ -483,16 +483,13 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async ([FromForm]  IFormFile? file) =>
+        async ([FromForm] IFormFile? file) =>
         {
-            //HttpContext.Response.Headers.Add("Content-Type", "application/json");
             String fileName = file.FileName;
             string tempfile = CreateTempfilePath(fileName);
             using var stream = File.OpenWrite(tempfile);
             await file.CopyToAsync(stream);
             return Results.Ok();
-
-            // dom more fancy stuff with the IFormFile
         }
     )
     .DisableAntiforgery()
@@ -515,37 +512,6 @@ app.MapPost(
     )
     .DisableAntiforgery()
     .Accepts<IFormFile>("multipart/form-data");
-
-app.MapPost(
-        "/v0/upload",
-        async Task<IResult> ([FromForm] IFormFile request) =>
-        {
-
-                String fileName = request.FileName;
-                string tempfile = CreateTempfilePath(fileName);
-
-
-           // var form = await request.OpenReadStream();
-            //var formFile = form.Files["file"];
-
-            // if (request is null || request.Length == 0)
-            //     return Results.BadRequest();
-
-            //await using var stream = request.OpenReadStream();
-
-            //  var reader = new StreamReader(stream);
-            //  var text = await reader.ReadToEndAsync();
-            //  return Results.Ok(text);
-
-            using var stream = File.OpenWrite(tempfile);
-                await request.CopyToAsync(stream);
-            return Results.Ok();
-        }
-    )
-    .DisableAntiforgery()
-    .Accepts<IFormFile>("multipart/form-data");
-
-
 
 ///********************************************************************************************
 
