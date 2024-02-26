@@ -490,6 +490,7 @@ app.MapPost(
             string tempfile = CreateTempfilePath(fileName);
             using var stream = File.OpenWrite(tempfile);
             await file.CopyToAsync(stream);
+            return Results.Ok();
 
             // dom more fancy stuff with the IFormFile
         }

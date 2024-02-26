@@ -90,11 +90,11 @@
 
 
       <input type='file' name='file' class="form-control" value=null>
-      <!-- <button hx-post='/upload' hx-encoding='multipart/form-data'
+      <button hx-post='/upload'
         _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100' hx-target="#postContent"
-        enctype="multipart/form-data">
+         >
         Upload
-      </button> -->
+      </button>
       <progress id='progress' value='0' max='100'></progress>
 
       <button class="btn btn-primary mb-3">Add Post</button>
