@@ -73,7 +73,7 @@
 <body onload="checkFirstVisit()">
 
   <!-- <body> -->
-  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center">
+  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
@@ -105,7 +105,7 @@
 
 
     <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
-      mustache-array-template="posts-template" hx-trigger="load once" hx-ext="client-side-templates">
+      mustache-array-template="posts-template" hx-trigger="load once,postUpdated" >
 
 
       <div id="Post-id" class="col mb-auto posts-col">
@@ -127,9 +127,11 @@
                 hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=file]">
                 Update</a>
 
-              <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none"
-                hx-target=".Post-id-{{id}}" >
-                Edit</a> -->
+                <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"
+                 hx-headers='{"hx-trigger": "postUpdated"}' hx-target=".card-{{id}}"  hx-include="[id=xtitleID-{{id}}]">
+                edit</a>
+
+
             </div>
           </div>
           {{/data}}
