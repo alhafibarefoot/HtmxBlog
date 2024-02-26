@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Type" content="application/json;text/xhtml; charset=utf-8" />
   <link rel="shortcut icon" href="#" />
 
-  <script src="https://unpkg.com/htmx.org"></script>
-  <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
-  <script src="https://unpkg.com/mustache@latest"></script>
-  <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
-  <script>
+  <script  src="https://unpkg.com/htmx.org"></script>
+  <script  src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+  <script  src="https://unpkg.com/mustache@latest"></script>
+  <script  src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+  <script >
     function checkFirstVisit() {
       if (document.cookie.indexOf('mycookie') == -1) {
         // The cookie doesn't exist. Create it now
@@ -59,13 +59,35 @@
 
       },
     });
+
+    function getParameter(paramName) {
+                var searchString = window.location.search.substring(1), i, val, params = searchString.split("&");
+
+                for ( i = 0; i < params.length; i++) {
+                    val = params[i].split("=");
+                    if (val[0] == paramName) {
+                        return val[1];
+                    }
+                }
+                return null;
+            }
+
+            function getUrlData() {
+                var id = getParameter("id");
+                alert(id);
+                document.getElementsByName("content")[0].value = id;
+            }
+
+
+  </script>
+
   </script>
 
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  <script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
 </head>
