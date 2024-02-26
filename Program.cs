@@ -432,7 +432,7 @@ app.MapPost(
 
 app.MapPut(
     "/posts/{id}",
-    async (int id,  Post inputPost, AppDbContext db) =>
+    async (int id,  [FromBody] Post inputPost, AppDbContext db) =>
     {
         var post = await db.Posts.FindAsync(id);
 
