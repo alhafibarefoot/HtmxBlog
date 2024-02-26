@@ -419,7 +419,7 @@ app.MapGet(
 
 app.MapPost(
         "/posts",
-        async ( [FromBody] Post post, AppDbContext db) =>
+        async ( [FromForm] Post post, AppDbContext db) =>
         {
             //      //items[0].Title=post.Title;
 
@@ -433,7 +433,7 @@ app.MapPost(
 
 app.MapPut(
         "/posts/{id}",
-        async (int id, [FromBody]  Post inputPost, AppDbContext db) =>
+        async (int id, [FromForm]  Post inputPost, AppDbContext db) =>
         {
             var post = await db.Posts.FindAsync(id);
 
