@@ -419,7 +419,7 @@ app.MapGet(
 
 app.MapPost(
         "/posts",
-        async ( Post post, AppDbContext db) =>
+        async ( [FromBody] Post post, AppDbContext db) =>
         {
             //      //items[0].Title=post.Title;
 
@@ -433,7 +433,7 @@ app.MapPost(
 
 app.MapPut(
         "/posts/{id}",
-        async (int id, Post inputPost, AppDbContext db) =>
+        async (int id, [FromBody]  Post inputPost, AppDbContext db) =>
         {
             var post = await db.Posts.FindAsync(id);
 
@@ -483,7 +483,7 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async (IFormFile? file) =>
+        async ([FromForm] IFormFile? file) =>
         {
             //HttpContext.Response.Headers.Add("Content-Type", "application/json");
             String fileName = file.FileName;
@@ -499,7 +499,7 @@ app.MapPost(
 
 app.MapPost(
         "/uploadmany",
-        async (IFormFileCollection myFiles) =>
+        async ([FromForm]IFormFileCollection myFiles) =>
         {
             foreach (var file in myFiles)
             {

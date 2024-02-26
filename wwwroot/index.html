@@ -49,19 +49,13 @@
       },
 
       encodeParameters: function (xhr, parameters, elt) {
-        xhr.overrideMimeType("text/json");
+        xhr.overrideMimeType('text/json') // override default mime type
         // const body = { // set your request body
         //   data: parameters,
         //   options: { submissionFormat: 'pretty' }
         // }
-        //console.log('['+ parameters + ']');
-        return JSON.stringify(parameters);
-        // var jsonText = document.getElementById("MyRow")
-        //    jsonText.innerHTML=JSON.stringify(parameters);
+        return (JSON.stringify(parameters))
 
-        //return JSON.stringify(  body );
-
-        // location.reload();
 
       },
     });
@@ -78,13 +72,12 @@
 <!-- <body onload="checkFirstVisit()"> -->
 
 <body>
-  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center"
-    hx-ext="Alhafi-JSON-Accept-type,client-side-templates">
+  <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
     <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
-      hx-encoding='multipart/form-data'>
+      hx-encoding='multipart/form-data' hx-ext="Alhafi-JSON-Accept-type">
       <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -93,12 +86,12 @@
         wrap="virtual"></textarea>
 
 
-      <!-- <input type='file' name='file' class="form-control" >
-      <button hx-post='/upload2' hx-encoding='multipart/form-data'
+      <input type='file' name='file' class="form-control" value="">
+      <button hx-post='/upload' hx-encoding='multipart/form-data'
         _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100' hx-target="#postContent">
         Upload
       </button>
-      <progress id='progress' value='0' max='100'></progress> -->
+      <progress id='progress' value='0' max='100'></progress>
 
       <button class="btn btn-primary mb-3">Add Post</button>
 
@@ -117,7 +110,7 @@
     </form> -->
 
     <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
-      mustache-array-template="posts-template" hx-trigger="load once">
+      mustache-array-template="posts-template" hx-trigger="load once" hx-ext="client-side-templates">
 
 
       <div id="Post-id" class="col mb-auto posts-col">
@@ -125,23 +118,24 @@
           {{#data}}
           <div id="CardNo" class="card mt-5 card-{{id}}" style="width: 19.5rem">
             <div class="card-body">
-              <img class="mx-auto d-block" id="postImageID-{{id}}" src="./assests/img/poat.jfif" width="100" height="100">
+              <img class="mx-auto d-block" id="postImageID-{{id}}" src="./assests/img/poat.jfif" width="100"
+                height="100">
               <h5 class="card-title xtitlename" id="xtitleID-{{id}}">{{title}}</h5>
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}
               </p>
               <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}"
-                hx-target=".card-{{id}}" hx-swap="delete"
+                hx-target=".card-{{id}}" hx-swap="delete" hx-ext="Alhafi-JSON-Accept-type"
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
               <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
-                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content]">
+                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=file]" hx-ext="Alhafi-JSON-Accept-type">
                 Update</a>
 
-              <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none"
-                hx-target=".Post-id-{{id}}">
+              <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html" hx-swap="show:none"
+                hx-target=".Post-id-{{id}}" hx-ext="Alhafi-JSON-Accept-type">
                 Edit</a>
-            </div>
+            </div> -->
           </div>
           {{/data}}
         </template>
