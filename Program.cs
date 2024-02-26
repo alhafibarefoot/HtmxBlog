@@ -418,7 +418,7 @@ app.MapGet(
 
 app.MapPost(
     "/posts",
-    async ( Post  post, AppDbContext db) =>
+    async ( [FromBody] Post  post, AppDbContext db) =>
     {
         //      //items[0].Title=post.Title;
 
@@ -427,12 +427,12 @@ app.MapPost(
 
         return Results.Created($"/posts/{post.Id}", post);
     }
-).DisableAntiforgery()
-.Accepts<IFormFile>("multipart/form-data");
+).DisableAntiforgery();
+
 
 app.MapPut(
     "/posts/{id}",
-    async (int id, Post inputPost, AppDbContext db) =>
+    async (int id,  Post inputPost, AppDbContext db) =>
     {
         var post = await db.Posts.FindAsync(id);
 
@@ -446,8 +446,8 @@ app.MapPut(
 
         return Results.NoContent();
     }
-).DisableAntiforgery()
-.Accepts<IFormFile>("multipart/form-data");
+).DisableAntiforgery();
+
 
 app.MapDelete(
     "/posts/{id}",
