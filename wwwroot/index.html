@@ -78,20 +78,21 @@
       document.getElementsByName("content")[0].value = id;
     };
 
-    window.onload = function() {
-    document.getElementById('postImage').addEventListener('change', getFileName);
-}
-const getFileName = (event) => {
-    const files = event.target.files;
-    const fileName = files[0].name;
-    aler(fileName);
-    console.log("file name: ", fileName);
-};
+    window.onload = function () {
+      document.getElementById('file').addEventListener('change', getFileName);
+    }
+    const getFileName = (event) => {
+      const files = event.target.files;
+      const fileName = files[0].name;
+      document.getElementById("contentID").value = fileName;
+      aler(fileName);
+      console.log("file name: ", fileName);
+    };
 
 
   </script>
 
-  </script>
+
 
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -109,11 +110,12 @@ const getFileName = (event) => {
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts"  hx-encoding="multipart/form-data" hx-target=".posts-row"
+    <form id="myForm" hx-post="https://localhost:7137/posts" hx-encoding="multipart/form-data" hx-target=".posts-row"
       hx-swap="beforeend" hx-encoding='multipart/form-data'>
-      <div class="form-group" >
+      <div class="form-group">
 
         <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
+        <input  class="form-control mb-3" name="postImage" placeholder="Please enter Title" value="toto" />
 
         <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
 
@@ -122,11 +124,10 @@ const getFileName = (event) => {
 
       </div>
 
-      <div  class="form-group"
-        _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100"
+      <div class="form-group" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100"
         hx-target="#postContent">
-        <input id="file" type="file" name="file" accept=".jpg, .jpeg, .png" hx-post="/upload">
-        <button class="btn btn-primary mb-3"   >Add Post</button>
+        <input id="file" type="file" name="file" accept=".jpg, .jpeg, .png">
+        <button class="btn btn-primary mb-3">Add Post</button>
         <progress id='progress' value='0' max='100'></progress>
       </div>
 

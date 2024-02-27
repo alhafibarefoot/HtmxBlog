@@ -19,8 +19,8 @@ namespace HtmxBlog.Models
 
         [JsonIgnore]
 public string Src =>
-    // $"./wwwwroot/assets/img/{Id}/uploads/{postImage}";
-     $"./wwwwroot/assets/img/uploads/{postImage}";
+    // $"~/assets/img/{Id}/uploads/{postImage}";
+     $"~/assests/img/uploads/{postImage}";
 
 
 
