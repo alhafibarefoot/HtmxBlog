@@ -12,11 +12,11 @@ namespace HtmxPost.Migrations
         {
             migrationBuilder.InsertData(
                 table: "Posts",
-                columns: ["Id", "Title", "Content"],
+                columns: ["Id", "Title", "Content","postImage"],
                 values: new object[,]
                 {
-                    { 1, "SPA", "Single Page Application" },
-                    { 2, "HTMX", "Hyper Media Content" }
+                    { 1, "SPA", "Single Page Application","AlhafiLogo1.jpg" },
+                    { 2, "HTMX", "Hyper Media Content","AlhafiLogo2.jpg" }
                 }
             );
 

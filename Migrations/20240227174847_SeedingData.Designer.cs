@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HtmxPost.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240225041050_ImageField")]
-    partial class ImageField
+    [Migration("20240227174847_SeedingData")]
+    partial class SeedingData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
