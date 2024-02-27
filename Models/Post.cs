@@ -17,6 +17,10 @@ namespace HtmxBlog.Models
 
         public string? postImage { get; set; }
 
+        [JsonIgnore]
+public string Src =>
+    $"./wwwwroot/assets/img/{Id}/{postImage}";
+
 
 
     }
