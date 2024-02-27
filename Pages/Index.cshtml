@@ -1,44 +1,10 @@
 ﻿@page
 @model IndexModel
 @{
-  ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home page";
 }
 
-
-<div class="container col-lg-6 offset-lg-3 " hx-ext="client-side-templates ">
-  <h1 class="display-4 text-center">Learn HTMX</h1>
-
-  <form hx-get="https://localhost:7137/posts" hx-target=".posts-div" hx-swap="beforeend"
-    mustache-array-template="posts-template" hx-target-5*="#serious-errors" hx-target-404="#not-found"
-    hx-target-error="#any-errors" hx-trigger="submit">
-    <input type="email" class="form-control mb-3" id="exampleFormControlInput1" placeholder="name@example.com" />
-
-    <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="3"></textarea>
-
-    <button type="submit" class="btn btn-primary mb-3">Add Post</button>
-  </form>
-  <div class="posts-div d-flex align-items-center justify-content-center" style="height: 250px;">
-    <div class="row justify-content-center">
-      <dic class="col">
-        <div>
-          <template id="posts-template">
-            {{#data}}
-            <div class="card mt-5" style="width: 18rem">
-              <div class="card-body">
-                <h5 class="card-title">{{title}}</h5>
-                <p class="card-text">{{content}}</p>
-                <a href="#" class="btn btn-danger">Delete</a>
-                <a href="#" class="btn btn-success">Success</a>
-              </div>
-            </div>
-            {{/data}}
-          </template>
-        </div>
-    </div>
-  </div>
-</div>
-
-<div id="serious-errors"></div>
-<div id="not-found"></div>
-<div id="any-errors"></div>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
