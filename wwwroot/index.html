@@ -110,7 +110,7 @@
         wrap="virtual"></textarea>
 
 
-      <input id="postImage" type='file' name='file' class="form-control" value=null>
+      <input  type='file' name='postImage' class="form-control" value=null>
       <button hx-post='/upload' _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'
         hx-target="#postContent">
         Upload
@@ -146,12 +146,12 @@
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
               <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
-                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[id=postImage]">
+                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=fite]">
                 Update</a>
 
-                <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"
+                <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"
                  hx-headers='{"hx-trigger": "postUpdated"}' hx-target=".card-{{id}}"  hx-include="[id=xtitleID-{{id}}]">
-                edit</a>
+                edit</a> -->
 
 
             </div>
