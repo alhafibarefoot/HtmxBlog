@@ -109,9 +109,9 @@ const getFileName = (event) => {
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts" hx-encoding='multipart/form-data' hx-target=".posts-row"
+    <form id="myForm" hx-post="https://localhost:7137/posts"  hx-encoding="multipart/form-data" hx-target=".posts-row"
       hx-swap="beforeend" hx-encoding='multipart/form-data'>
-      <div class="form-group">
+      <div class="form-group" >
 
         <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
@@ -122,13 +122,14 @@ const getFileName = (event) => {
 
       </div>
 
-      <div class="form-group" hx-post='/upload'
-        _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'
-        hx-encoding='multipart/form-data' hx-target="#postContent">
-        <input id="postImage" type='file' name='postImage' class="form-control-file mb-3" accept=".jpg, .jpeg, .png">
-        <button class="btn btn-primary mb-3">Add Post</button>
+      <div  class="form-group"
+        _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100"
+        hx-target="#postContent">
+        <input id="file" type="file" name="file" accept=".jpg, .jpeg, .png" hx-post="/upload">
+        <button class="btn btn-primary mb-3"   >Add Post</button>
         <progress id='progress' value='0' max='100'></progress>
       </div>
+
       <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
         height="100" />
 

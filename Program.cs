@@ -483,12 +483,12 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async ([FromForm] IFormFile? postImage) =>
+        async ([FromForm] IFormFile? file) =>
         {
-            String fileName = postImage.FileName;
+            String fileName = file.FileName;
             string tempfile = CreateTempfilePath(fileName);
             using var stream = File.OpenWrite(tempfile);
-            await postImage.CopyToAsync(stream);
+            await file.CopyToAsync(stream);
             return Results.Ok();
         }
     )
