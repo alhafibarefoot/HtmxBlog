@@ -82,6 +82,7 @@
       var file = myFile.files[0];
       var filename = file.name;
       document.getElementById("postImage").value = filename;
+
     };
 
 
@@ -107,26 +108,18 @@
 
     <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
       hx-encoding='multipart/form-data'>
-      <div class="form-group">
-
-        <input type="hidden" class="form-control mb-3" name="id" value=0 />
-        <input type="hidden" id="postImage" class="form-control mb-3" name="postImage" />
 
 
-        <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
+      <input type="hidden" class="form-control mb-3" name="id" value=0 />
+      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage"   />
+      <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
+      <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
+        wrap="virtual"></textarea>
 
-        <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
-          wrap="virtual"></textarea>
-
-      </div>
-
-      <div class="form-group" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100"
-        hx-target="#postContent">
-        <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
-          onchange="getFileData(this);">
-        <button class="btn btn-primary mb-3">Add Post</button>
-        <progress id='progress' value='0' max='100'></progress>
-      </div>
+      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
+        onchange="getFileData(this);" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100" >
+      <button class="btn btn-primary mb-3"  >Add Post</button>
+      <progress id='progress' value='0' max='100'></progress>
 
       <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
         height="100" />
