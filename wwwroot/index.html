@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Type" content="application/json;text/xhtml; charset=utf-8" />
   <link rel="shortcut icon" href="#" />
 
-  <script  src="https://unpkg.com/htmx.org"></script>
-  <script  src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
-  <script  src="https://unpkg.com/mustache@latest"></script>
-  <script  src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
-  <script  src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
-  <script >
+  <script src="https://unpkg.com/htmx.org"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+  <script src="https://unpkg.com/mustache@latest"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+  <script>
     function checkFirstVisit() {
       if (document.cookie.indexOf('mycookie') == -1) {
         // The cookie doesn't exist. Create it now
@@ -61,22 +61,32 @@
     });
 
     function getParameter(paramName) {
-                var searchString = window.location.search.substring(1), i, val, params = searchString.split("&");
+      var searchString = window.location.search.substring(1), i, val, params = searchString.split("&");
 
-                for ( i = 0; i < params.length; i++) {
-                    val = params[i].split("=");
-                    if (val[0] == paramName) {
-                        return val[1];
-                    }
-                }
-                return null;
-            }
+      for (i = 0; i < params.length; i++) {
+        val = params[i].split("=");
+        if (val[0] == paramName) {
+          return val[1];
+        }
+      }
+      return null;
+    };
 
-            function getUrlData() {
-                var id = getParameter("id");
-                alert(id);
-                document.getElementsByName("content")[0].value = id;
-            }
+    function getUrlData() {
+      var id = getParameter("id");
+      alert(id);
+      document.getElementsByName("content")[0].value = id;
+    };
+
+    window.onload = function() {
+    document.getElementById('postImage').addEventListener('change', getFileName);
+}
+const getFileName = (event) => {
+    const files = event.target.files;
+    const fileName = files[0].name;
+    aler(fileName);
+    console.log("file name: ", fileName);
+};
 
 
   </script>
@@ -87,7 +97,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
-  <script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
 </head>
@@ -100,37 +110,35 @@
 
 
     <form id="myForm" hx-post="https://localhost:7137/posts" hx-encoding='multipart/form-data' hx-target=".posts-row"
-      hx-swap="beforeend">
+      hx-swap="beforeend" hx-encoding='multipart/form-data'>
+      <div class="form-group">
 
-      <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
+        <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
 
-      <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
+        <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
 
-      <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
-        wrap="virtual"></textarea>
+        <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
+          wrap="virtual"></textarea>
 
+      </div>
 
-      <button class="btn btn-primary mb-3">Add Post</button>
-
-
+      <div class="form-group" hx-post='/upload'
+        _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'
+        hx-encoding='multipart/form-data' hx-target="#postContent">
+        <input id="postImage" type='file' name='postImage' class="form-control-file mb-3" accept=".jpg, .jpeg, .png">
+        <button class="btn btn-primary mb-3">Add Post</button>
+        <progress id='progress' value='0' max='100'></progress>
+      </div>
       <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
         height="100" />
 
-       <div class="form">
-      <input  type='file' name='postImage'  class="form-control mb-3">
-      <button hx-post='/upload' _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'
-        hx-target="#postContent">
-        Upload
-      </button>
-      <progress id='progress' value='0' max='100'></progress>
-    </div>
 
 
     </form>
 
 
     <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
-      mustache-array-template="posts-template" hx-trigger="load once,postUpdated" >
+      mustache-array-template="posts-template" hx-trigger="load once,postUpdated">
 
 
       <div id="Post-id" class="col mb-auto posts-col">
@@ -152,7 +160,7 @@
                 hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=postImage]">
                 Update</a>
 
-                <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"
+              <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"
                  hx-headers='{"hx-trigger": "postUpdated"}' hx-target=".card-{{id}}"  hx-include="[id=xtitleID-{{id}}]">
                 edit</a> -->
 
