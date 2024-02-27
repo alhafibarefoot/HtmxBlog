@@ -78,11 +78,11 @@
       document.getElementsByName("content")[0].value = id;
     };
 
-    function getFileData(myFile){
-   var file = myFile.files[0];
-   var filename = file.name;
-   document.getElementById("postImage").value =filename;
-};
+    function getFileData(myFile) {
+      var file = myFile.files[0];
+      var filename = file.name;
+      document.getElementById("postImage").value = filename;
+    };
 
 
   </script>
@@ -105,12 +105,12 @@
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row"
-      hx-swap="beforeend" hx-encoding='multipart/form-data'>
+    <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
+      hx-encoding='multipart/form-data'>
       <div class="form-group">
 
         <input type="hidden" class="form-control mb-3" name="id" value=0 />
-        <input id="postImage" class="form-control mb-3" name="postImage"  />
+        <input id="postImage" class="form-control mb-3" name="postImage" />
 
 
         <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
@@ -122,7 +122,8 @@
 
       <div class="form-group" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100"
         hx-target="#postContent">
-        <input id="file"  name="file" type="file" accept=".jpg, .jpeg, .png"  hx-post="https://localhost:7137/upload" onchange="getFileData(this);">
+        <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
+          onchange="getFileData(this);">
         <button class="btn btn-primary mb-3">Add Post</button>
         <progress id='progress' value='0' max='100'></progress>
       </div>
