@@ -30,7 +30,7 @@ static string CreateTempfilePath(string fileName)
 {
     // var filename = $"{Guid.NewGuid()}.tmp";
     var filename = fileName;
-    var directoryPath = Path.Combine("./wwwroot/assests/img/loaded", "uploads");
+    var directoryPath = Path.Combine("./wwwroot/assests/img", "uploads");
     if (!Directory.Exists(directoryPath))
         Directory.CreateDirectory(directoryPath);
 
@@ -421,7 +421,6 @@ app.MapPost(
         "/posts",
         async ([FromForm] Post post, AppDbContext db) =>
         {
-            //      //items[0].Title=post.Title;
 
             db.Posts.Add(post);
             await db.SaveChangesAsync();
@@ -442,6 +441,7 @@ app.MapPut(
 
             post.Title = inputPost.Title.ToString();
             post.Content = inputPost.Content.ToString();
+            post.postImage = inputPost.postImage.ToString();
 
             await db.SaveChangesAsync();
 
@@ -483,12 +483,12 @@ app.MapGet(
 
 app.MapPost(
         "/upload",
-        async ([FromForm] IFormFile? file) =>
+        async ([FromForm] IFormFile? postImage) =>
         {
-            String fileName = file.FileName;
+            String fileName = postImage.FileName;
             string tempfile = CreateTempfilePath(fileName);
             using var stream = File.OpenWrite(tempfile);
-            await file.CopyToAsync(stream);
+            await postImage.CopyToAsync(stream);
             return Results.Ok();
         }
     )
@@ -499,12 +499,12 @@ app.MapPost(
         "/uploadmany",
         async (IFormFileCollection myFiles) =>
         {
-            foreach (var file in myFiles)
+            foreach (var postImage in myFiles)
             {
-                String fileName = file.FileName;
+                String fileName = postImage.FileName;
                 string tempfile = CreateTempfilePath(fileName);
                 using var stream = File.OpenWrite(tempfile);
-                await file.CopyToAsync(stream);
+                await postImage.CopyToAsync(stream);
 
                 // dom more fancy stuff with the IFormFile
             }
