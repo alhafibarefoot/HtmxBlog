@@ -6,12 +6,28 @@
   <meta http-equiv="Content-Type" content="application/json;text/xhtml; charset=utf-8" />
   <link rel="shortcut icon" href="#" />
 
-  <script src="https://unpkg.com/htmx.org"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
   <script src="https://unpkg.com/mustache@latest"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+
   <script>
+
+    function removeDiv(div) {
+      // alert(div);
+      // var x = document.getElementById("div");
+      // x.style.display === "none";
+      location.reload();
+    };
+
     function checkFirstVisit() {
       if (document.cookie.indexOf('mycookie') == -1) {
         // The cookie doesn't exist. Create it now
@@ -30,6 +46,7 @@
       document.getElementById("contentID").value =
         (document.getElementById("xcontentID-" + id).innerHTML).trim();
     };
+
     htmx.on('#myForm', 'htmx:xhr:progress', function (evt) {
       htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
     });
@@ -55,7 +72,7 @@
         //   options: { submissionFormat: 'pretty' }
         // }
         return (JSON.stringify(parameters))
-
+        //location.reload();
 
       },
     });
@@ -91,27 +108,21 @@
 
 
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"></script>
 </head>
 
 <body onload="checkFirstVisit()">
 
-<!-- <body> -->
+  <!-- <body> -->
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts" hx-headers='{"hx-trigger": "addingPost"}' hx-target=".posts-row" hx-swap="beforeend"
-      hx-encoding='multipart/form-data'>
+    <form id="myForm" hx-post="https://localhost:7137/posts" hx-headers='{"hx-trigger": "addingPost"}'
+      hx-target=".posts-row" hx-swap="beforeend" hx-encoding='multipart/form-data'>
 
 
       <input type="hidden" class="form-control mb-3" name="id" value=0 />
-      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage" value="poat.jfif"/>
+      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage" value="poat.jfif" />
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
@@ -145,12 +156,13 @@
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}
               </p>
-              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}" hx-headers='{"hx-trigger": "DeletingPost"}'
-                hx-target=".card-{{id}}" hx-swap="delete"
+              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}"
+                hx-headers='{"hx-trigger": "DeletingPost"}' hx-target=".card-{{id}}" hx-swap="delete"
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
-              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-headers='{"hx-trigger": "UpdateingPost"}' hx-target=".card-{{id}}"
-                hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=postImage]">
+              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}"
+                hx-headers='{"hx-trigger": "UpdateingPost"}' hx-target=".card-{{id}}" hx-validate="true"
+                hx-include="[name=id],[name=title] ,[name=content],[name=postImage]">
                 Update</a>
 
               <!-- <a href="#" class="btn btn-success" hx-get="./editPost.html?id=1"

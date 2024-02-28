@@ -26,7 +26,7 @@
       // var x = document.getElementById("div");
       // x.style.display === "none";
       location.reload();
-    }
+    };
 
     function checkFirstVisit() {
       if (document.cookie.indexOf('mycookie') == -1) {
@@ -45,46 +45,90 @@
       document.getElementById("contentID").value = '';
       document.getElementById("contentID").value =
         (document.getElementById("xcontentID-" + id).innerHTML).trim();
-    }
+    };
+
+    htmx.on('#myForm', 'htmx:xhr:progress', function (evt) {
+      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
+    });
 
     htmx.defineExtension("Alhafi-JSON-Accept-type", {
       onEvent: function (name, evt) {
         if (name === "htmx:configRequest") {
-          //evt.detail.headers["Content-Type"] = "application/json";
           evt.detail.headers["Content-Type"] = "application/json";
+          evt.detail.headers["Access-Control-Allow-Origin"] = "*";
+          // evt.detail.headers["Vary"] = "HX-Request";
+          //evt.detail.headers["X-API-Key"]= "sjk_xxx";
         }
       },
 
       encodeParameters: function (xhr, parameters, elt) {
         xhr.overrideMimeType("text/json");
 
-        return JSON.stringify(parameters);
+        // const body = { // set your request body
+        //   data: parameters,
+        //   options: { submissionFormat: 'pretty' }
+        // }
+        return (JSON.stringify(parameters))
         //location.reload();
       },
     });
+
+    function getParameter(paramName) {
+      var searchString = window.location.search.substring(1), i, val, params = searchString.split("&");
+
+      for (i = 0; i < params.length; i++) {
+        val = params[i].split("=");
+        if (val[0] == paramName) {
+          return val[1];
+        }
+      }
+      return null;
+    };
+
+    function getUrlData() {
+      var id = getParameter("id");
+      alert(id);
+      document.getElementsByName("content")[0].value = id;
+    };
+
+    function getFileData(myFile) {
+      var file = myFile.files[0];
+      var filename = file.name;
+      document.getElementById("postImage").value = filename;
+
+    };
+
   </script>
 </head>
 
-<body onload="checkFirstVisit()">
+<body>
+  <!-- <body onload="checkFirstVisit()"> -->
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
-    <form hx-post="https://localhost:7137/posts/html"  hx-encoding='multipart/form-data' hx-target=".posts-row" hx-swap="beforeend"
-      enctype="multipart/form-data" contentType="application/json">
-      <input type="hidden" class="form-control mb-3" name="id" placeholder="Please enter Title" value=0 />
+    <form hx-post="https://localhost:7137/posts/html" hx-encoding='multipart/form-data' hx-target=".posts-row"
+      hx-swap="beforeend" hx-encoding='multipart/form-data'>
 
+      <input type="hidden" class="form-control mb-3" name="id" value=0 />
+      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage" value="poat.jfif" />
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
-
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
 
+      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
+        onchange="getFileData(this);" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100">
+
+      <progress id='progress' value='0' max='100'></progress>
+
+      <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
+        height="100" />
       <button class="btn btn-primary mb-3">Add Post</button>
 
     </form>
 
 
     <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/html/post" hx-trigger="load once">
-      <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="30" height="30" />
+
 
 
 
