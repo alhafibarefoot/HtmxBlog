@@ -111,18 +111,19 @@
 
 
       <input type="hidden" class="form-control mb-3" name="id" value=0 />
-      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage"   />
+      <input type="hidden" id="postImage" class="form-control mb-3" name="postImage" />
       <input type="text" class="form-control mb-3" name="title" placeholder="Please enter Title" required />
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
 
       <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
-        onchange="getFileData(this);" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100" >
-      <button class="btn btn-primary mb-3"  >Add Post</button>
+        onchange="getFileData(this);" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100">
+
       <progress id='progress' value='0' max='100'></progress>
 
       <img id="indicator" class="htmx-indicator" src="./assests/img/load.gif" alt="Loading...." width="100"
         height="100" />
+      <button class="btn btn-primary mb-3">Add Post</button>
 
 
 
