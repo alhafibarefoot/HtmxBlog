@@ -73,8 +73,6 @@ builder.Services.AddSwaggerGen(c =>
     );
 });
 
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -96,8 +94,8 @@ builder.Services.AddCors(options =>
     );
 });
 
-builder.Services.AddDbContext<AppDbContext>(x =>
-    x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+builder.Services.AddDbContext<AppDbContext>(
+    x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 var app = builder.Build();
@@ -202,25 +200,30 @@ app.MapDelete(
         return Results.Ok(varPostL);
     }
 );
+
 //https://khalidabuhakmeh.com/generating-bogus-http-endpoints-with-aspnet-core-minimal-apis
 //GET http://localhost:5208/people?pageSize=1
 //PUT http://localhost:5208/people/1
 
-app.MapAutoBogusEndpoint<Person>("/people", rules =>
-{
-    rules.RuleFor(p => p.Id, f => f.IndexGlobal + 1);
-    rules.RuleFor(p => p.FullName, f => f.Name.FullName());
-});
+app.MapAutoBogusEndpoint<Person>(
+    "/people",
+    rules =>
+    {
+        rules.RuleFor(p => p.Id, f => f.IndexGlobal + 1);
+        rules.RuleFor(p => p.FullName, f => f.Name.FullName());
+    }
+);
 
+app.MapGet(
+    "/api/invitation",
+    () =>
+    {
+        // Logic to handle the invitation and get the senders name
+        //...
 
-
-app.MapGet("/api/invitation", () =>
-{
-    // Logic to handle the invitation and get the senders name
-    //...
-
-    var sender = "Will";
-    return Results.Content($"""
+        var sender = "Will";
+        return Results.Content(
+            $"""
                               <head>
                                  <title>Accept Invitation - My App</title>
                               </head>
@@ -228,29 +231,38 @@ app.MapGet("/api/invitation", () =>
                                  <h1 style="font-size:30px;">Thanks for accepting our invitation!</h1>
                                  <h2 style="font-size:26px;">We've let {sender} know you have accepted the invite.</h2>
                               </body>
-                            """, "text/html");
-});
-
-app.MapGet("/external-html", () =>
-{
-    var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
-    return Results.Text(htmlContent, "text/html");
-});
-
-
-app.MapGet("/call-external-api", async (HttpClient httpClient) =>
-{
-    var response = await httpClient.GetAsync("https://api.example.com/endpoint");
-    if (response.IsSuccessStatusCode)
-    {
-        var content = await response.Content.ReadAsStringAsync();
-        return Results.Text(content, "application/json");
+                            """,
+            "text/html"
+        );
     }
-    else
+);
+
+app.MapGet(
+    "/external-html",
+    () =>
     {
-        return Results.BadRequest("Error calling external API");
+        var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
+        return Results.Text(htmlContent, "text/html");
     }
-});
+);
+
+app.MapGet(
+    "/call-external-api",
+    async (HttpClient httpClient) =>
+    {
+        var response = await httpClient.GetAsync("https://api.example.com/endpoint");
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            return Results.Text(content, "application/json");
+        }
+        else
+        {
+            return Results.BadRequest("Error calling external API");
+        }
+    }
+);
+
 //*********************  HTML API  *********************************************
 
 
@@ -277,7 +289,8 @@ app.MapGet(
 
         <div class='card-body card-body'>
             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
-                + post.postImage + @"'  width='100'height='100'>
+                + post.postImage
+                + @"'  width='100'height='100'>
             <h5 class='card-title xtitlename'>"
                 + post.Title
                 + @"</h5><p class='card-text xcontentname'>"
@@ -300,7 +313,7 @@ app.MapGet(
                 + @"' hx-target='.posts-col-"
                 + post.Id
                 + @"'
-              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  >
+              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]',[name=postImage]'   >
             Update</a>
         </div>
 
@@ -343,7 +356,8 @@ app.MapPut(
 
         <div class='card-body card-body'>
             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
-                + post.postImage + @"'  width='100'height='100'>
+                    + post.postImage
+                    + @"'  width='100'height='100'>
             <h5 class='card-title xtitlename'>"
                     + post.Title
                     + @"</h5><p class='card-text xcontentname'>"
@@ -366,7 +380,7 @@ app.MapPut(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'  >
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' ,[name=postImage]' >
             Update</a>
         </div>
 
@@ -400,7 +414,8 @@ app.MapPost(
 
         <div class='card-body card-body'>
              <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
-                + post.postImage + @"' width='100'height='100'>
+                    + post.postImage
+                    + @"' width='100'height='100'>
             <h5 class='card-title xtitlename'>"
                     + post.Title
                     + @"</h5><p class='card-text xcontentname'>"
@@ -423,7 +438,7 @@ app.MapPost(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]'   >
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' ,[name=postImage]'  >
             Update</a>
         </div>
 
@@ -477,7 +492,6 @@ app.MapPost(
         "/posts",
         async ([FromForm] Post post, AppDbContext db) =>
         {
-
             db.Posts.Add(post);
             await db.SaveChangesAsync();
 
@@ -619,7 +633,6 @@ public class HtmlOptions
 {
     public string? myHTML { get; set; }
 }
-
 
 public record Person(int Id, string FullName)
 {
