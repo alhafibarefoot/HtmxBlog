@@ -290,7 +290,7 @@ app.MapGet(
         <div class='card-body card-body'>
             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
                 + post.postImage
-                + @"'  width='100'height='100'>
+                + @"'  width='100' height='100'>
             <h5 class='card-title xtitlename'>"
                 + post.Title
                 + @"</h5><p class='card-text xcontentname'>"
@@ -358,7 +358,7 @@ app.MapPut(
         <div class='card-body card-body'>
             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
                     + post.postImage
-                    + @"'  width='100'height='100'>
+                    + @"'  width='100' height='100'>
             <h5 class='card-title xtitlename'>"
                     + post.Title
                     + @"</h5><p class='card-text xcontentname'>"
@@ -416,7 +416,7 @@ app.MapPost(
         <div class='card-body card-body'>
              <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
                     + post.postImage
-                    + @"' width='100'height='100'>
+                    + @"' width='100' height='100'>
             <h5 class='card-title xtitlename'>"
                     + post.Title
                     + @"</h5><p class='card-text xcontentname'>"
