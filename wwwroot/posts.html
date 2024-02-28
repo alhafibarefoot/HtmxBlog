@@ -21,11 +21,18 @@
 
   <script>
 
+
+      // CORS workaround
+      document.addEventListener("htmx:configRequest", (evt) => {
+        evt.detail.headers = [];
+      });
+
+
     function removeDiv(div) {
       // alert(div);
-      // var x = document.getElementById("div");
-      // x.style.display === "none";
-      location.reload();
+      var x = document.getElementById("div");
+      x.style.display === "none";
+      //location.reload();
     };
 
     function checkFirstVisit() {
