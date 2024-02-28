@@ -235,6 +235,21 @@ app.MapGet("/external-html", () =>
     var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
     return Results.Text(htmlContent, "text/html");
 });
+
+
+app.MapGet("/call-external-api", async (HttpClient httpClient) =>
+{
+    var response = await httpClient.GetAsync("https://api.example.com/endpoint");
+    if (response.IsSuccessStatusCode)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        return Results.Text(content, "application/json");
+    }
+    else
+    {
+        return Results.BadRequest("Error calling external API");
+    }
+});
 //*********************  HTML API  *********************************************
 
 
