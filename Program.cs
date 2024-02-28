@@ -288,7 +288,9 @@ app.MapGet(
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
-            <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
+            <img class='mx-auto d-block' id='postImageID-"
+                    + post.Id
+                    + @"' src='./assests/img/uploads/"
                     + post.postImage
                     + @"'  width='100' height='100'>
             <h5 class='card-title xtitlename'>"
@@ -358,7 +360,9 @@ app.MapPut(
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
-            <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
+             <img class='mx-auto d-block' id='postImageID-"
+                    + post.Id
+                    + @"' src='./assests/img/uploads/"
                     + post.postImage
                     + @"'  width='100' height='100'>
             <h5 class='card-title xtitlename'>"
@@ -416,7 +420,9 @@ app.MapPost(
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
-             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
+              <img class='mx-auto d-block' id='postImageID-"
+                    + post.Id
+                    + @"' src='./assests/img/uploads/"
                     + post.postImage
                     + @"' width='100' height='100'>
             <h5 class='card-title xtitlename'>"
