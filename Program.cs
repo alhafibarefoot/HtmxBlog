@@ -211,6 +211,24 @@ app.MapAutoBogusEndpoint<Person>("/people", rules =>
     rules.RuleFor(p => p.FullName, f => f.Name.FullName());
 });
 
+
+
+app.MapGet("/api/invitation", () =>
+{
+    // Logic to handle the invitation and get the senders name
+    //...
+
+    var sender = "Will";
+    return Results.Content($"""
+                              <head>
+                                 <title>Accept Invitation - My App</title>
+                              </head>
+                              <body style="font-family:Gill Sans, sans-serif; text-align:center;">
+                                 <h1 style="font-size:30px;">Thanks for accepting our invitation!</h1>
+                                 <h2 style="font-size:26px;">We've let {sender} know you have accepted the invite.</h2>
+                              </body>
+                            """, "text/html");
+});
 //*********************  HTML API  *********************************************
 
 
