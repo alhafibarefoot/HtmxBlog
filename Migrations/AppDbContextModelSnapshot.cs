@@ -34,7 +34,7 @@ namespace HtmxPost.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 #pragma warning restore 612, 618
         }
