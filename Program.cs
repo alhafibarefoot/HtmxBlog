@@ -40,6 +40,7 @@ static string CreateTempfilePath(string fileName)
 
 ///
 // Add services to the container.
+builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddXmlSerializerFormatters().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -72,7 +73,7 @@ builder.Services.AddSwaggerGen(c =>
     );
 });
 
-builder.Services.AddHttpClient();
+
 
 builder.Services.AddCors(options =>
 {
