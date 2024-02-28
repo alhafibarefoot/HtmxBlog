@@ -229,6 +229,12 @@ app.MapGet("/api/invitation", () =>
                               </body>
                             """, "text/html");
 });
+
+app.MapGet("/external-html", () =>
+{
+    var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
+    return Results.Text(htmlContent, "text/html");
+});
 //*********************  HTML API  *********************************************
 
 
