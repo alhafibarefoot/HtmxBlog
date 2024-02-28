@@ -19,7 +19,7 @@ namespace HtmxBlog.Models
 
         [JsonIgnore]
         public string Src =>
-            // $"~/assets/img/{Id}/uploads/{postImage}";
+
             $"~/assests/img/uploads/{postImage}";
     }
 }
