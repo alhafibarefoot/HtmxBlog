@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Bogus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -200,6 +201,15 @@ app.MapDelete(
         return Results.Ok(varPostL);
     }
 );
+//https://khalidabuhakmeh.com/generating-bogus-http-endpoints-with-aspnet-core-minimal-apis
+//GET http://localhost:5208/people?pageSize=1
+//PUT http://localhost:5208/people/1
+
+app.MapAutoBogusEndpoint<Person>("/people", rules =>
+{
+    rules.RuleFor(p => p.Id, f => f.IndexGlobal + 1);
+    rules.RuleFor(p => p.FullName, f => f.Name.FullName());
+});
 
 //*********************  HTML API  *********************************************
 
@@ -525,7 +535,7 @@ app.UseAuthorization();
 
 app.Run();
 
-class PostStatic
+public record PostStatic
 {
     public int Id { get; set; }
 
@@ -563,3 +573,12 @@ public class HtmlOptions
 {
     public string? myHTML { get; set; }
 }
+
+
+public record Person(int Id, string FullName)
+{
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Dog Dog { get; set; }
+}
+
+public record Dog(string Name);
