@@ -313,7 +313,7 @@ app.MapGet(
                 + @"' hx-target='.posts-col-"
                 + post.Id
                 + @"'
-              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]',[name=postImage]'   >
+              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content],[name=,[name=postImage]'   >
             Update</a>
         </div>
 
@@ -380,7 +380,7 @@ app.MapPut(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' ,[name=postImage]' >
+              hx-validate='true' hx-include='[name=id],[name=title] ,[name=content],[name=,[name=postImage]'  >
             Update</a>
         </div>
 
@@ -438,7 +438,7 @@ app.MapPost(
                     + @"' hx-target='.posts-col-"
                     + post.Id
                     + @"'
-             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content]' ,[name=postImage]'  >
+             hx-validate='true' hx-include='[name=id],[name=title] ,[name=content],[name=,[name=postImage]'   >
             Update</a>
         </div>
 
