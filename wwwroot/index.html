@@ -99,14 +99,14 @@
     crossorigin="anonymous"></script>
 </head>
 
-<!-- <body onload="checkFirstVisit()"> -->
+<body onload="checkFirstVisit()">
 
-<body>
+<!-- <body> -->
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center" hx-ext="client-side-templates">
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts" hx-target=".posts-row" hx-swap="beforeend"
+    <form id="myForm" hx-post="https://localhost:7137/posts" hx-headers='{"hx-trigger": "addingPost"}' hx-target=".posts-row" hx-swap="beforeend"
       hx-encoding='multipart/form-data'>
 
 
@@ -131,7 +131,7 @@
 
 
     <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
-      mustache-array-template="posts-template" hx-trigger="load once,postUpdated">
+      mustache-array-template="posts-template" hx-trigger="load,addingPost,UpdateingPost,DeletingPost">
 
 
       <div id="Post-id" class="col mb-auto posts-col">
@@ -145,11 +145,11 @@
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}
               </p>
-              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}"
+              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}" hx-headers='{"hx-trigger": "DeletingPost"}'
                 hx-target=".card-{{id}}" hx-swap="delete"
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
-              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-target=".card-{{id}}"
+              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}" hx-headers='{"hx-trigger": "UpdateingPost"}' hx-target=".card-{{id}}"
                 hx-validate="true" hx-include="[name=id],[name=title] ,[name=content],[name=postImage]">
                 Update</a>
 
