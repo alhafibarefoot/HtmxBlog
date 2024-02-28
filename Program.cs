@@ -267,52 +267,52 @@ app.MapGet(
 
 
 app.MapGet(
-    "/html/post",
-    async (HtmlOptions option, AppDbContext db) =>
-    {
-        string json = JsonConvert.SerializeObject(await db.Posts.ToListAsync());
-        List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
-        string ResponseHTML = null;
-
-        foreach (var post in item)
+        "/html/post",
+        async (HtmlOptions option, AppDbContext db) =>
         {
-            //Results.Extensions.HtmlResponse(
-            option.myHTML =
-                @"
+            string json = JsonConvert.SerializeObject(await db.Posts.ToListAsync());
+            List<Post> item = JsonConvert.DeserializeObject<List<Post>>(json);
+            string ResponseHTML = null;
+
+            foreach (var post in item)
+            {
+                //Results.Extensions.HtmlResponse(
+                option.myHTML =
+                    @"
 <div id=Post-id-"
-                + post.Id
-                + "  class='col mb-auto posts-col-"
-                + post.Id
-                + @"'>
+                    + post.Id
+                    + "  class='col mb-auto posts-col-"
+                    + post.Id
+                    + @"'>
 
      <div class='card mt-5 card' style='width: 19.5rem'>
 
         <div class='card-body card-body'>
             <img class='mx-auto d-block' id='postImageID-{{id}}' src='./assests/img/uploads/"
-                + post.postImage
-                + @"'  width='100' height='100'>
+                    + post.postImage
+                    + @"'  width='100' height='100'>
             <h5 class='card-title xtitlename'>"
-                + post.Title
-                + @"</h5><p class='card-text xcontentname'>"
-                + post.Content
-                + @"</p>
+                    + post.Title
+                    + @"</h5><p class='card-text xcontentname'>"
+                    + post.Content
+                    + @"</p>
             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
-                + post.Id
-                + @"'    hx-target='.posts-col-"
-                + post.Id
-                + @"' hx-swap='delete'
+                    + post.Id
+                    + @"'    hx-target='.posts-col-"
+                    + post.Id
+                    + @"' hx-swap='delete'
                 )]'
                  hx-confirm='Are you sure you wish to delete this Post? Titled : "
-                + post.Title
-                + @"'
+                    + post.Title
+                    + @"'
 
             >Delete</a>
 
             <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
-                + post.Id
-                + @"' hx-target='.posts-col-"
-                + post.Id
-                + @"'
+                    + post.Id
+                    + @"' hx-target='.posts-col-"
+                    + post.Id
+                    + @"'
               hx-validate='true' hx-include='[name=id],[name=title] ,[name=content],[name=postImage]'   >
             Update</a>
         </div>
@@ -323,12 +323,14 @@ app.MapGet(
 </div>
 
 ";
-            ResponseHTML = ResponseHTML + option.myHTML;
-            option.myHTML = ResponseHTML;
+                ResponseHTML = ResponseHTML + option.myHTML;
+                option.myHTML = ResponseHTML;
+            }
+            return Results.Extensions.HtmlResponse(option.myHTML);
         }
-        return Results.Extensions.HtmlResponse(option.myHTML);
-    }
-);
+    )
+    .DisableAntiforgery()
+    .Accepts<IFormFile>("multipart/form-data");
 
 app.MapPut(
         "/posts/html/{id}",
