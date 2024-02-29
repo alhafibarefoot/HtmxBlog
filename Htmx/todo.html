@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>JS Bin</title>
-  <script src="https://unpkg.com/htmx.org"></script>
-  <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.4.1"></script>
+  <script src="https://unpkg.com/htmx.org@1.4.1/dist/ext/client-side-templates.js"></script>
   <script src="https://unpkg.com/mustache@latest"></script>
 </head>
 <body>
@@ -20,8 +20,7 @@
     <p id="content">Start</p>
 
     <template id="foo">
-      <p> {% raw %}{{userID}}{% endraw %} and {% raw %}{{id}}{% endraw %} and {% raw %}{{title}}{% endraw %} and {% raw %}{{completed}}{% endraw %}</p>
+      <p>my Result : {{userID}} and {{id}} and {{title}} and {{completed}}</p>
     </template>
   </div>
 </body>
-</html>
