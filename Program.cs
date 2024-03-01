@@ -1,32 +1,10 @@
-using System.Net.Mime;
-using System.Text;
 using HtmxBlog.Data;
-using HtmxBlog.Models;
 using HtmxBlog.Modules;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-///
-
-
-static string CreateTempfilePath(string fileName)
-{
-    // var filename = $"{Guid.NewGuid()}.tmp";
-    var filename = fileName;
-    var directoryPath = Path.Combine("./wwwroot/assests/img", "uploads");
-    if (!Directory.Exists(directoryPath))
-        Directory.CreateDirectory(directoryPath);
-
-    return Path.Combine(directoryPath, filename);
-}
-
-///
-// Add services to the container.
+/// Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddXmlSerializerFormatters().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
@@ -106,65 +84,21 @@ if (app.Environment.IsProduction())
     app.UseHsts();
 }
 
-///********************Static API**********************************************************
+///********************Static API*************************************************************
 app.RegisterStaticsEndpoints();
 
-//*********************  HTML API  *********************************************
+///********************HTML API***************************************************************
 
 app.RegisterPostsHtmlEndpoints();
+
 ///////////////////////
 
-///********************************************************************************************
+///********************Post API***************************************************************
 
 app.RegisterPostsEndpoints();
 
-///*******************************File Upload *************************************************************
-///
-
-// Get token
-app.MapGet(
-    "antiforgery/token",
-    (IAntiforgery forgeryService, HttpContext context) =>
-    {
-        var tokens = forgeryService.GetAndStoreTokens(context);
-        var xsrfToken = tokens.RequestToken!;
-        return TypedResults.Content(xsrfToken, "text/plain");
-    }
-);
-
-//.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
-
-app.MapPost(
-        "/upload",
-        async ([FromForm] IFormFile? file) =>
-        {
-            String fileName = file.FileName;
-            string tempfile = CreateTempfilePath(fileName);
-            using var stream = File.OpenWrite(tempfile);
-            await file.CopyToAsync(stream);
-            return Results.Ok();
-        }
-    )
-    .DisableAntiforgery()
-    .Accepts<IFormFile>("multipart/form-data");
-
-app.MapPost(
-        "/uploadmany",
-        async (IFormFileCollection myFiles) =>
-        {
-            foreach (var file in myFiles)
-            {
-                String fileName = file.FileName;
-                string tempfile = CreateTempfilePath(fileName);
-                using var stream = File.OpenWrite(tempfile);
-                await file.CopyToAsync(stream);
-
-                // dom more fancy stuff with the IFormFile
-            }
-        }
-    )
-    .DisableAntiforgery()
-    .Accepts<IFormFile>("multipart/form-data");
+///********************File Upload API*********************************************************
+app.RegisterFileUploadEndpoints();
 
 ///********************************************************************************************
 
@@ -177,32 +111,3 @@ app.MapRazorPages();
 app.UseAuthorization();
 
 app.Run();
-
-
-
-class CusomtHTMLResult : IResult
-{
-    private readonly string _htmlContent;
-
-    public CusomtHTMLResult(string htmlContent)
-    {
-        _htmlContent = htmlContent;
-    }
-
-    public async Task ExecuteAsync(HttpContext httpContext)
-    {
-        httpContext.Response.ContentType = MediaTypeNames.Text.Html;
-        httpContext.Response.ContentLength = Encoding.UTF8.GetByteCount(_htmlContent);
-        await httpContext.Response.WriteAsync(_htmlContent);
-    }
-}
-
-
-
-public record Person(int Id, string FullName)
-{
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public Dog Dog { get; set; }
-}
-
-public record Dog(string Name);

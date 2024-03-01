@@ -1,4 +1,5 @@
 using FluentValidation;
+using HtmxBlog.Modules;
 
 namespace HtmxBlog.Data
 {

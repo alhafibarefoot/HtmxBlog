@@ -226,6 +226,54 @@ public static class ProductsHtmlModule
         /// Use direct call to DBcontext calling API/////////////////////////
 
         ///********************************************************************************************
+        endpoints.MapGet(
+            "/api/invitation",
+            () =>
+            {
+                // Logic to handle the invitation and get the senders name
+                //...
+
+                var sender = "Will";
+                return Results.Content(
+                    $"""
+                              <head>
+                                 <title>Accept Invitation - My App</title>
+                              </head>
+                              <body style="font-family:Gill Sans, sans-serif; text-align:center;">
+                                 <h1 style="font-size:30px;">Thanks for accepting our invitation!</h1>
+                                 <h2 style="font-size:26px;">We've let {sender} know you have accepted the invite.</h2>
+                              </body>
+                            """,
+                    "text/html"
+                );
+            }
+        );
+
+        endpoints.MapGet(
+            "/external-html",
+            () =>
+            {
+                var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
+                return Results.Text(htmlContent, "text/html");
+            }
+        );
+
+        endpoints.MapGet(
+            "/call-external-api",
+            async (HttpClient httpClient) =>
+            {
+                var response = await httpClient.GetAsync("https://api.example.com/endpoint");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return Results.Text(content, "application/json");
+                }
+                else
+                {
+                    return Results.BadRequest("Error calling external API");
+                }
+            }
+        );
     }
 }
 

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 public static class ProductsModule
 {
-
     public static void RegisterPostsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapGet("/posts", async (AppDbContext db) => await db.Posts.ToListAsync());

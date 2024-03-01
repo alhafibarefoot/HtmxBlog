@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace HtmxBlog.Modules
 {
@@ -120,54 +117,18 @@ namespace HtmxBlog.Modules
             //     }
             // );
 
-            endpoints.MapGet(
-                "/api/invitation",
-                () =>
-                {
-                    // Logic to handle the invitation and get the senders name
-                    //...
 
-                    var sender = "Will";
-                    return Results.Content(
-                        $"""
-                              <head>
-                                 <title>Accept Invitation - My App</title>
-                              </head>
-                              <body style="font-family:Gill Sans, sans-serif; text-align:center;">
-                                 <h1 style="font-size:30px;">Thanks for accepting our invitation!</h1>
-                                 <h2 style="font-size:26px;">We've let {sender} know you have accepted the invite.</h2>
-                              </body>
-                            """,
-                        "text/html"
-                    );
+            endpoints.MapGet(
+                "antiforgery/token",
+                (IAntiforgery forgeryService, HttpContext context) =>
+                {
+                    var tokens = forgeryService.GetAndStoreTokens(context);
+                    var xsrfToken = tokens.RequestToken!;
+                    return TypedResults.Content(xsrfToken, "text/plain");
                 }
             );
 
-            endpoints.MapGet(
-                "/external-html",
-                () =>
-                {
-                    var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
-                    return Results.Text(htmlContent, "text/html");
-                }
-            );
-
-            endpoints.MapGet(
-                "/call-external-api",
-                async (HttpClient httpClient) =>
-                {
-                    var response = await httpClient.GetAsync("https://api.example.com/endpoint");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var content = await response.Content.ReadAsStringAsync();
-                        return Results.Text(content, "application/json");
-                    }
-                    else
-                    {
-                        return Results.BadRequest("Error calling external API");
-                    }
-                }
-            );
+            //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
         }
 
         public record PostStatic
@@ -179,4 +140,12 @@ namespace HtmxBlog.Modules
             public string? Content { get; set; }
         }
     }
+
+    public record Person(int Id, string FullName)
+    {
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Dog Dog { get; set; }
+    }
+
+    public record Dog(string Name);
 }
