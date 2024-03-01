@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace HtmxBlog.Models
 {
@@ -12,14 +13,13 @@ namespace HtmxBlog.Models
         [Required]
         public string? Title { get; set; }
 
+        [SwaggerParameter(Description = "Property description", Required = false)]
         public string? Content { get; set; }
 
         [DefaultValue("poat.jfif")]
         public string? postImage { get; set; }
 
         [JsonIgnore]
-        public string Src =>
-
-            $"~/assests/img/uploads/{postImage}";
+        public string Src => $"~/assests/img/uploads/{postImage}";
     }
 }

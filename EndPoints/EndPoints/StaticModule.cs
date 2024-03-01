@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace HtmxBlog.Modules
 {
@@ -6,7 +8,7 @@ namespace HtmxBlog.Modules
     {
         public static void RegisterStaticsEndpoints(this IEndpointRouteBuilder routes)
         {
-             var endpoints = routes.MapGroup("/api/v1/static/posts");
+            var endpoints = routes.MapGroup("/api/v1/static/posts");
             var varPostist = new List<PostStatic>
             {
                 new PostStatic
@@ -23,24 +25,37 @@ namespace HtmxBlog.Modules
                 }
             };
 
-            endpoints.MapGet(
-                "/baseurl",
-                (HttpContext context) =>
-                {
-                    var baseURL = context.Request.Host;
-                    var basepath = context.Request.Path;
-                    // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
-                    return Results.Ok(baseURL);
-                }
-            );
+            endpoints
+                .MapGet(
+                    "/baseurl",
+                    (HttpContext context) =>
+                    {
+                        var baseURL = context.Request.Host;
+                        var basepath = context.Request.Path;
+                        // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
+                        return Results.Ok(baseURL);
+                    }
+                )
+                .WithOpenApi(
+                    x =>
+                        new OpenApiOperation(x)
+                        {
+                            Summary = "Get Library Books",
+                            Description =
+                                "Returns information about all the available books from the Amy's library.",
+                            Tags = new List<OpenApiTag> { new() { Name = "Amy's Library" } }
+                        }
+                );
 
-            endpoints.MapGet(
-                "/",
-                () =>
-                {
-                    return Results.Ok(varPostist);
-                }
-            );
+            endpoints
+                .MapGet(
+                    "/",
+                    () =>
+                    {
+                        return Results.Ok(varPostist);
+                    }
+                )
+                .WithMetadata(new SwaggerOperationAttribute("summary001", "description001"));
 
             endpoints.MapGet(
                 "/{id}",
