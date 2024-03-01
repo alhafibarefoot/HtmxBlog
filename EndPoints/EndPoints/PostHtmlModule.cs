@@ -6,11 +6,13 @@ using Newtonsoft.Json;
 
 public static class ProductsHtmlModule
 {
-    public static void RegisterPostsHtmlEndpoints(this IEndpointRouteBuilder endpoints)
+    public static void RegisterPostsHtmlEndpoints(this IEndpointRouteBuilder routes)
     {
+        var endpoints = routes.MapGroup("/api/v1/html/posts");
+
         endpoints
             .MapGet(
-                "/html/post",
+                "/",
                 async (HtmlOptions option, AppDbContext db) =>
                 {
                     string json = JsonConvert.SerializeObject(await db.Posts.ToListAsync());
@@ -41,7 +43,7 @@ public static class ProductsHtmlModule
                             + @"</h5><p class='card-text xcontentname'>"
                             + post.Content
                             + @"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"'    hx-target='.posts-col-"
                             + post.Id
@@ -53,7 +55,7 @@ public static class ProductsHtmlModule
 
             >Delete</a>
 
-            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"' hx-target='.posts-col-"
                             + post.Id
@@ -79,7 +81,7 @@ public static class ProductsHtmlModule
 
         endpoints
             .MapPut(
-                "/posts/html/{id}",
+                "/{id}",
                 async (int id, [FromForm] Post inputPost, AppDbContext db) =>
                 {
                     var post = await db.Posts.FindAsync(id);
@@ -114,7 +116,7 @@ public static class ProductsHtmlModule
                             + @"</h5><p class='card-text xcontentname'>"
                             + post.Content
                             + @"</p>
-             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+             <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"'    hx-target='.posts-col-"
                             + post.Id
@@ -126,7 +128,7 @@ public static class ProductsHtmlModule
 
             >Delete</a>
 
-            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"' hx-target='.posts-col-"
                             + post.Id
@@ -148,7 +150,7 @@ public static class ProductsHtmlModule
 
         endpoints
             .MapPost(
-                "/posts/html",
+                "/",
                 async ([FromForm] Post post, AppDbContext db) =>
                 {
                     db.Posts.Add(post);
@@ -175,7 +177,7 @@ public static class ProductsHtmlModule
                             + @"</h5><p class='card-text xcontentname'>"
                             + post.Content
                             + @"</p>
-            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/posts/html/"
+            <a href='#' class='btn btn-danger' hx-delete='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"'    hx-target='.posts-col-"
                             + post.Id
@@ -187,7 +189,7 @@ public static class ProductsHtmlModule
 
             >Delete</a>
 
-            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/posts/html/"
+            <a href='#' class='btn btn-success' hx-put='https://localhost:7137/api/v1/html/posts/"
                             + post.Id
                             + @"' hx-target='.posts-col-"
                             + post.Id
@@ -209,7 +211,7 @@ public static class ProductsHtmlModule
 
         endpoints
             .MapDelete(
-                "/posts/html/{id}",
+                "/{id}",
                 async (int id, AppDbContext db) =>
                 {
                     if (await db.Posts.FindAsync(id) is Post post)
@@ -227,7 +229,7 @@ public static class ProductsHtmlModule
 
         ///********************************************************************************************
         endpoints.MapGet(
-            "/api/invitation",
+            "/invitation",
             () =>
             {
                 // Logic to handle the invitation and get the senders name

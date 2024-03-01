@@ -7,6 +7,7 @@ namespace HtmxBlog.Modules
 {
     public static class UploadFilesModules
     {
+
         static string CreateTempfilePath(string fileName)
         {
             // var filename = $"{Guid.NewGuid()}.tmp";
@@ -18,8 +19,9 @@ namespace HtmxBlog.Modules
             return Path.Combine(directoryPath, filename);
         }
 
-        public static void RegisterFileUploadEndpoints(this IEndpointRouteBuilder endpoints)
+        public static void RegisterFileUploadEndpoints(this IEndpointRouteBuilder routes)
         {
+              var endpoints = routes.MapGroup("/api/v1/File");
             endpoints
                 .MapPost(
                     "/upload",

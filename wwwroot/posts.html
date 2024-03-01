@@ -117,7 +117,7 @@
   <div class="container col-sm-6 offset-lg-3 align-items-center justify-content-center">
     <h1 class="display-6 text-center">Alhafi News</h1>
 
-    <form id="myForm" hx-post="https://localhost:7137/posts/html" hx-encoding='multipart/form-data' hx-target=".posts-row"
+    <form id="myForm" hx-post="https://localhost:7137/api/v1/html/posts" hx-encoding='multipart/form-data' hx-target=".posts-row"
       hx-swap="beforeend" _='on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100'>
 
       <input type="hidden" class="form-control mb-3" name="id" value=0 />
@@ -126,7 +126,7 @@
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
 
-      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
+      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/api/v1/File/upload"
         onchange="getFileData(this);">
 
       <button class="btn btn-primary mb-3">Add Post</button>
@@ -142,7 +142,7 @@
 
 
 
-    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/html/post" hx-encoding='multipart/form-data' hx-trigger="load">
+    <div class="row justify-content-around posts-row" hx-get="https://localhost:7137/api/v1/html/posts" hx-encoding='multipart/form-data' hx-trigger="load">
 
 
 

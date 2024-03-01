@@ -4,8 +4,9 @@ namespace HtmxBlog.Modules
 {
     public static class StaticModule
     {
-        public static void RegisterStaticsEndpoints(this IEndpointRouteBuilder endpoints)
+        public static void RegisterStaticsEndpoints(this IEndpointRouteBuilder routes)
         {
+             var endpoints = routes.MapGroup("/api/v1/static/posts");
             var varPostist = new List<PostStatic>
             {
                 new PostStatic
@@ -34,7 +35,7 @@ namespace HtmxBlog.Modules
             );
 
             endpoints.MapGet(
-                "api/static/posts",
+                "/",
                 () =>
                 {
                     return Results.Ok(varPostist);
@@ -42,7 +43,7 @@ namespace HtmxBlog.Modules
             );
 
             endpoints.MapGet(
-                "api/static/posts/{id}",
+                "/{id}",
                 (int id) =>
                 {
                     var varPost = varPostist.Find(c => c.Id == id);
@@ -54,7 +55,7 @@ namespace HtmxBlog.Modules
             );
 
             endpoints.MapPut(
-                "api/static/posts/{id}",
+                "/{id}",
                 (PostStatic UpdatecommListStatic, int id) =>
                 {
                     var varPost = varPostist.Find(c => c.Id == id);
@@ -69,7 +70,7 @@ namespace HtmxBlog.Modules
             );
 
             endpoints.MapPost(
-                "api/static/posts",
+                "/",
                 (PostStatic postListStatic) =>
                 {
                     if (postListStatic.Id != 0 || string.IsNullOrEmpty(postListStatic.Title))
@@ -93,7 +94,7 @@ namespace HtmxBlog.Modules
             );
 
             endpoints.MapDelete(
-                "api/static/posts/{id}",
+                "/{id}",
                 (int id) =>
                 {
                     var varPostL = varPostist.Find(c => c.Id == id);

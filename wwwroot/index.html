@@ -117,7 +117,7 @@
     <h1 class="display-6 text-center">Alhafi Blog</h1>
 
 
-    <form id="myForm" hx-post="https://localhost:7137/posts" hx-headers='{"hx-trigger": "addingPost"}'
+    <form id="myForm" hx-post="https://localhost:7137/api/v1/posts" hx-headers='{"hx-trigger": "addingPost"}'
       hx-target=".posts-row" hx-swap="beforeend" hx-encoding='multipart/form-data'>
 
 
@@ -127,7 +127,7 @@
       <textarea class="form-control mb-3" name="content" rows="3" placeholder="Please enter Content"
         wrap="virtual"></textarea>
 
-      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/upload"
+      <input id="file" name="file" type="file" accept=".jpg, .jpeg, .png" hx-post="https://localhost:7137/api/v1/File/upload"
         onchange="getFileData(this);" _="on htmx:xhr:progress(loaded, total) set #progress.value to (loaded/total)*100">
 
       <progress id='progress' value='0' max='100'></progress>
@@ -141,7 +141,7 @@
     </form>
 
 
-    <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/posts"
+    <div id="MyRow" class="row justify-content-around posts-row" hx-get="https://localhost:7137/api/v1/posts"
       mustache-array-template="posts-template" hx-trigger="load,addingPost,UpdateingPost,DeletingPost">
 
 
@@ -156,11 +156,11 @@
               <p class="card-text xcontentname" id="xcontentID-{{id}}">
                 {{content}}
               </p>
-              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/posts/{{id}}"
+              <a href="#" class="btn btn-danger" hx-delete="https://localhost:7137/api/v1/posts/{{id}}"
                 hx-headers='{"hx-trigger": "DeletingPost"}' hx-target=".card-{{id}}" hx-swap="delete"
                 hx-confirm="Are you sure you wish to delete this Post? Titled : {{title}}">Delete</a>
 
-              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/posts/{{id}}"
+              <a href="#" class="btn btn-success" hx-put="https://localhost:7137/api/v1/posts/{{id}}"
                 hx-headers='{"hx-trigger": "UpdateingPost"}' hx-target=".card-{{id}}" hx-validate="true"
                 hx-include="[name=id],[name=title] ,[name=content],[name=postImage]">
                 Update</a>

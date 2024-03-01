@@ -5,23 +5,24 @@ using Microsoft.EntityFrameworkCore;
 
 public static class ProductsModule
 {
-    public static void RegisterPostsEndpoints(this IEndpointRouteBuilder endpoints)
+    public static void RegisterPostsEndpoints(this IEndpointRouteBuilder routes)
     {
-        endpoints.MapGet("/posts", async (AppDbContext db) => await db.Posts.ToListAsync());
+        var endpoints = routes.MapGroup("/api/v1/posts");
+        endpoints.MapGet("/", async (AppDbContext db) => await db.Posts.ToListAsync());
 
         //app.MapGet("/posts", async (AppDbContext db) =>  JsonConvert.SerializeObject(await db.Posts.ToListAsync()));
         //app.MapGet("/posts", async (AppDbContext db) =>  new Microsoft.AspNetCore.Mvc.JsonResult(await db.Posts.ToListAsync()));
 
 
         endpoints.MapGet(
-            "/posts/{id}",
+            "/{id}",
             async (int id, AppDbContext db) =>
                 await db.Posts.FindAsync(id) is Post post ? Results.Ok(post) : Results.NotFound()
         );
 
         endpoints
             .MapPost(
-                "/posts",
+                "/",
                 async ([FromForm] Post post, AppDbContext db) =>
                 {
                     db.Posts.Add(post);
@@ -34,7 +35,7 @@ public static class ProductsModule
 
         endpoints
             .MapPut(
-                "/posts/{id}",
+                "/{id}",
                 async (int id, [FromForm] Post inputPost, AppDbContext db) =>
                 {
                     var post = await db.Posts.FindAsync(id);
@@ -54,7 +55,7 @@ public static class ProductsModule
             .DisableAntiforgery();
 
         endpoints.MapDelete(
-            "/posts/{id}",
+            "/{id}",
             async (int id, AppDbContext db) =>
             {
                 if (await db.Posts.FindAsync(id) is Post post)
