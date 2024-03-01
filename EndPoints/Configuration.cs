@@ -1,3 +1,4 @@
+using System.Reflection;
 using HtmxBlog.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,6 +65,11 @@ public static class Configuration
                     TermsOfService = new("https://www.alhafi.org/")
                 }
             );
+             // Set the comments path for the Swagger JSON and UI.
+        // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        // c.IncludeXmlComments(xmlPath);
+
         });
     }
 

@@ -7,6 +7,11 @@ public static class ProductsModule
 {
     public static void RegisterPostsEndpoints(this IEndpointRouteBuilder routes)
     {
+        /// <summary>
+        /// Gets the list of all Posts.
+        /// </summary>
+        /// <returns>The list of Posts.</returns>
+        // GET: api/Employee
         var endpoints = routes.MapGroup("/api/v1/posts");
         endpoints.MapGet("/", async (AppDbContext db) => await db.Posts.ToListAsync());
 
