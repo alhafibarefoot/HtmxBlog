@@ -2,30 +2,17 @@ using System.Net.Mime;
 using System.Text;
 using HtmxBlog.Data;
 using HtmxBlog.Models;
+using HtmxBlog.Modules;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Bogus;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 ///
-var varPostist = new List<PostStatic>
-{
-    new PostStatic
-    {
-        Id = 1,
-        Title = "Post1",
-        Content = "Content1"
-    },
-    new PostStatic
-    {
-        Id = 2,
-        Title = "Post2",
-        Content = "Content2"
-    }
-};
+
 
 static string CreateTempfilePath(string fileName)
 {
@@ -119,149 +106,8 @@ if (app.Environment.IsProduction())
     app.UseHsts();
 }
 
-///********************************************************************************************
-
-app.MapGet(
-    "/baseurl",
-    (HttpContext context) =>
-    {
-        var baseURL = context.Request.Host;
-        var basepath = context.Request.Path;
-        // return Results.Ok($"Base URL: {baseURL} and base path: {basepath} thus, full path: {baseURL + basepath}");
-        return Results.Ok(baseURL);
-    }
-);
-
-app.MapGet(
-    "api/static/posts",
-    () =>
-    {
-        return Results.Ok(varPostist);
-    }
-);
-
-app.MapGet(
-    "api/static/posts/{id}",
-    (int id) =>
-    {
-        var varPost = varPostist.Find(c => c.Id == id);
-        if (varPost == null)
-            return Results.NotFound("Sorry this command doesn't exsists");
-
-        return Results.Ok(varPost);
-    }
-);
-
-app.MapPut(
-    "api/static/posts/{id}",
-    (PostStatic UpdatecommListStatic, int id) =>
-    {
-        var varPost = varPostist.Find(c => c.Id == id);
-        if (varPost == null)
-            return Results.NotFound("Sorry this command doesn't exsists");
-
-        varPost.Title = UpdatecommListStatic.Title;
-        varPost.Content = UpdatecommListStatic.Content;
-
-        return Results.Ok(varPost);
-    }
-);
-
-app.MapPost(
-    "api/static/posts",
-    (PostStatic postListStatic) =>
-    {
-        if (postListStatic.Id != 0 || string.IsNullOrEmpty(postListStatic.Title))
-        {
-            return Results.BadRequest("Invalid Id or HowTo filling");
-        }
-        if (
-            varPostist.FirstOrDefault(c => c.Title.ToLower() == postListStatic.Title.ToLower())
-            != null
-        )
-        {
-            return Results.BadRequest("HowTo Exsists");
-        }
-
-        postListStatic.Id = varPostist.OrderByDescending(c => c.Id).FirstOrDefault().Id + 1;
-        varPostist.Add(postListStatic);
-        return Results.Ok(varPostist);
-    }
-);
-
-app.MapDelete(
-    "api/static/posts/{id}",
-    (int id) =>
-    {
-        var varPostL = varPostist.Find(c => c.Id == id);
-        if (varPostL == null)
-            return Results.NotFound("Sorry this command doesn't exsists");
-        varPostist.Remove(varPostL);
-        return Results.Ok(varPostL);
-    }
-);
-
-//https://khalidabuhakmeh.com/generating-bogus-http-endpoints-with-aspnet-core-minimal-apis
-//GET http://localhost:5208/people?pageSize=1
-//PUT http://localhost:5208/people/1
-
-app.MapAutoBogusEndpoint<Person>(
-    "/people",
-    rules =>
-    {
-        rules.RuleFor(p => p.Id, f => f.IndexGlobal + 1);
-        rules.RuleFor(p => p.FullName, f => f.Name.FullName());
-    }
-);
-
-app.MapGet(
-    "/api/invitation",
-    () =>
-    {
-        // Logic to handle the invitation and get the senders name
-        //...
-
-        var sender = "Will";
-        return Results.Content(
-            $"""
-                              <head>
-                                 <title>Accept Invitation - My App</title>
-                              </head>
-                              <body style="font-family:Gill Sans, sans-serif; text-align:center;">
-                                 <h1 style="font-size:30px;">Thanks for accepting our invitation!</h1>
-                                 <h2 style="font-size:26px;">We've let {sender} know you have accepted the invite.</h2>
-                              </body>
-                            """,
-            "text/html"
-        );
-    }
-);
-
-app.MapGet(
-    "/external-html",
-    () =>
-    {
-        var htmlContent = File.ReadAllText("./wwwroot/cardPost.html");
-        return Results.Text(htmlContent, "text/html");
-    }
-);
-
-app.MapGet(
-    "/call-external-api",
-    async (HttpClient httpClient) =>
-    {
-        var response = await httpClient.GetAsync("https://api.example.com/endpoint");
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            return Results.Text(content, "application/json");
-        }
-        else
-        {
-            return Results.BadRequest("Error calling external API");
-        }
-    }
-);
+///********************Static API**********************************************************
+app.RegisterStaticsEndpoints();
 
 //*********************  HTML API  *********************************************
 
@@ -483,66 +329,9 @@ app.MapDelete(
 
 /// Use direct access by calling API withen to DBcontext /////////////////////////
 ///
+app.RegisterPostsEndpoints();
 
 
-app.MapGet("/posts", async (AppDbContext db) => await db.Posts.ToListAsync());
-
-//app.MapGet("/posts", async (AppDbContext db) =>  JsonConvert.SerializeObject(await db.Posts.ToListAsync()));
-//app.MapGet("/posts", async (AppDbContext db) =>  new Microsoft.AspNetCore.Mvc.JsonResult(await db.Posts.ToListAsync()));
-
-
-app.MapGet(
-    "/posts/{id}",
-    async (int id, AppDbContext db) =>
-        await db.Posts.FindAsync(id) is Post post ? Results.Ok(post) : Results.NotFound()
-);
-
-app.MapPost(
-        "/posts",
-        async ([FromForm] Post post, AppDbContext db) =>
-        {
-            db.Posts.Add(post);
-            await db.SaveChangesAsync();
-
-            return Results.Created($"/posts/{post.Id}", post);
-        }
-    )
-    .DisableAntiforgery();
-
-app.MapPut(
-        "/posts/{id}",
-        async (int id, [FromForm] Post inputPost, AppDbContext db) =>
-        {
-            var post = await db.Posts.FindAsync(id);
-
-            if (post is null)
-                return Results.NotFound();
-
-            post.Title = inputPost.Title.ToString();
-            post.Content = inputPost.Content.ToString();
-            post.postImage = inputPost.postImage.ToString();
-
-            await db.SaveChangesAsync();
-
-            return Results.NoContent();
-        }
-    )
-    .DisableAntiforgery();
-
-app.MapDelete(
-    "/posts/{id}",
-    async (int id, AppDbContext db) =>
-    {
-        if (await db.Posts.FindAsync(id) is Post post)
-        {
-            db.Posts.Remove(post);
-            await db.SaveChangesAsync();
-            return Results.NoContent();
-        }
-
-        return Results.NotFound();
-    }
-);
 
 ///*******************************File Upload *************************************************************
 ///
@@ -604,14 +393,7 @@ app.UseAuthorization();
 
 app.Run();
 
-public record PostStatic
-{
-    public int Id { get; set; }
 
-    public string? Title { get; set; }
-
-    public string? Content { get; set; }
-}
 
 class CusomtHTMLResult : IResult
 {
